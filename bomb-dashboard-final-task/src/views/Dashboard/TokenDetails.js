@@ -5,7 +5,7 @@ import useBondStats from '../../hooks/useBondStats';
 import usebShareStats from '../../hooks/usebShareStats';
 import { roundAndFormatNumber } from '../../0x';
 import MetamaskFox from '../../assets/img/metamask-fox.svg';
-import { Box, Button, Typography, Grid } from '@material-ui/core';
+import { Box, Button, Grid } from '@material-ui/core';
 import useBombFinance from '../../hooks/useBombFinance';
 const TokenDetails = () => {
     // const classes = useStyles();

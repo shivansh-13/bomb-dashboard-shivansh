@@ -10,7 +10,8 @@ import useStakedBalanceOnBoardroom from '../../hooks/useStakedBalanceOnBoardroom
 import TokenDetails from './TokenDetails';
 import useHarvestFromBoardroom from '../../hooks/useHarvestFromBoardroom';
 import { ReactComponent as IconDiscord } from '../../assets/img/discord.svg';
-import { ReactComponent as IconDown } from '../../assets/img/down-arrow-50.png';
+// import { ReactComponent as IconDown } from '../../assets/img/down-arrow-50.png';
+import useRedeem from '../../hooks/useRedeem'
 import { Box, Card, Container, Button, CardContent, Typography, Grid } from '@material-ui/core';
 import ProgressCountdown from './components/ProgressCountdown';
 import { getDisplayBalance } from '../../utils/formatBalance';
@@ -62,8 +63,13 @@ const Dashboard = () => {
   const classes = useStyles();
   const stakedBalance = useStakedBalanceOnBoardroom();
   const bankId = "BombBtcbLPBShareRewardPool";
+  const bankId2 = "BombBshareLPBShareRewardPool";
   const bank = useBank(bankId);
+  const bank2 = useBank(bankId2);
+  const { onRedeem1 } = useRedeem(bank);
+  const { onRedeem2 } = useRedeem(bank2);
   let statsOnPool = useStatsForPool(bank);
+  let statsOnPool2 = useStatsForPool(bank2);
   const scalingFactor = useMemo(() => (cashStat ? Number(cashStat.priceInDollars).toFixed(4) : null), [cashStat]);
   const earnedInDollars = (Number(tokenPriceInDollars) * Number(getDisplayBalance(earnings))).toFixed(2);
   return (
@@ -81,46 +87,46 @@ const Dashboard = () => {
 
 
             <Box mt={5}>
-              <Grid container spacing={3} style={{ marginTop: '20px', display: 'flex', flexDirection: 'column',  borderStyle: 'none', backgroundColor: ' rgba(35, 40, 75, 0.75' }}>
-              <Typography color="textPrimary" align="center" variant="h4" gutterBottom style={{marginLeft:'10%',width:'80%',paddingTop:'10px', borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF', paddingBottom: '7px'}}>  
-                    Bomb Finance Summary
+              <Grid container spacing={3} style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', borderStyle: 'none', backgroundColor: ' rgba(35, 40, 75, 0.75' }}>
+                <Typography color="textPrimary" align="center" variant="h4" gutterBottom style={{ marginLeft: '10%', width: '80%', paddingTop: '10px', borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF', paddingBottom: '7px' }}>
+                  Bomb Finance Summary
                 </Typography>
-               <Grid  style={{display: 'flex', flexDirection: 'row', alignItems: 'center',paddingLeft:'10px', paddingRight:'10px' }}>
-                <Grid item xs={8}>
-                  <TokenDetails />
+                <Grid style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', paddingLeft: '10px', paddingRight: '10px' }}>
+                  <Grid item xs={8}>
+                    <TokenDetails />
+                  </Grid>
+                  <Grid item xs={4}>
+
+                    <div className={classes.gridItem} style={{ color: 'white' }} >
+                      <CardContent align="center" >
+                        <Typography style={{}}>Current Epoch</Typography>
+                        <Typography style={{ fontSize: '30px' }}>{Number(currentEpoch)}</Typography>
+                      </CardContent>
+                    </div>
+
+
+                    <div className={classes.gridItem} style={{ color: 'white' }} >
+                      <CardContent style={{ textAlign: 'center' }}>
+                        <div style={{ fontSize: '30px' }}>
+                          <ProgressCountdown base={moment().toDate()} hideBar={true} deadline={to} description="Next Epoch in" />
+                        </div>
+                        <Typography style={{}}>Next Epoch in</Typography>
+                      </CardContent>
+                    </div>
+
+
+                    <div className={classes.gridItem} style={{ color: 'white' }} >
+                      <CardContent align="center">
+                        <Typography style={{ color: 'rgba(0, 232, 162, 1)' }}>
+                          Live TWAP:{scalingFactor}
+                        </Typography>
+                        <Typography style={{ color: 'rgba(0, 232, 162, 1)' }}>
+                          TVL: ${statsOnPool?.TVL}
+                        </Typography>
+                      </CardContent>
+                    </div>
+                  </Grid>
                 </Grid>
-                <Grid item xs={4}>
-
-                  <div className={classes.gridItem} style={{ color: 'white' }} >
-                    <CardContent align="center" >
-                      <Typography style={{}}>Current Epoch</Typography>
-                      <Typography style={{ fontSize: '30px' }}>{Number(currentEpoch)}</Typography>
-                    </CardContent>
-                  </div>
-
-
-                  <div className={classes.gridItem} style={{ color: 'white' }} >
-                    <CardContent style={{ textAlign: 'center' }}>
-                      <div style={{ fontSize: '30px' }}>
-                        <ProgressCountdown base={moment().toDate()} hideBar={true} deadline={to} description="Next Epoch in" />
-                      </div>
-                      <Typography style={{}}>Next Epoch in</Typography>
-                    </CardContent>
-                  </div>
-
-
-                  <div className={classes.gridItem} style={{ color: 'white' }} >
-                    <CardContent align="center">
-                      <Typography style={{ color: 'rgba(0, 232, 162, 1)' }}>
-                        Live TWAP:{scalingFactor}
-                      </Typography>
-                      <Typography style={{ color: 'rgba(0, 232, 162, 1)' }}>
-                        TVL: ${statsOnPool?.TVL}
-                      </Typography>
-                    </CardContent>
-                  </div>
-                </Grid>
-              </Grid>
               </Grid>
 
               <Grid container spacing={3} style={{ marginTop: '20px', marginBottom: '20px', display: 'flex', alignItems: 'center' }}>
@@ -165,7 +171,7 @@ const Dashboard = () => {
                         marginBottom: '10px'
                       }
                     }>  <a
-                      style={{ textDecoration: 'none', color:'black' }}
+                      style={{ textDecoration: 'none', color: 'black' }}
                       href="https://docs.bomb.money"
                       // className={'navLink ' + classes.link}
                       rel="noopener noreferrer"
@@ -202,10 +208,11 @@ const Dashboard = () => {
                         </Grid>
                         <Grid item xs={2}>
                           <button style={{ fontSize: '12px', color: '#FFFFFF', padding: '5px', borderRadius: '20px', width: '100px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }} >
-                          {/* <IconDown style={{ fill: '#dddfee', height: '20px' }} /> */}
-                          Deposit</button>
+                            {/* <IconDown style={{ fill: '#dddfee', height: '20px' }} /> */}
+                            Deposit</button>
                         </Grid>
                         <Grid item xs={2}>
+
                           <button style={{ fontSize: '12px', color: '#FFFFFF', padding: '5px', borderRadius: '20px', width: '100px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
                             Withdraw</button>
                         </Grid>
@@ -216,7 +223,7 @@ const Dashboard = () => {
                             className={earnings.eq(0) || !canClaimReward ? 'shinyButtonDisabledRewards' : 'shinyButtonEnabled'}
                             disabled={earnings.eq(0) || !canClaimReward}
                           >
-                          {/* shinyButtonEnabled */}
+                            {/* shinyButtonEnabled */}
                             Claim Reward
                           </Button>
                         </Grid>
@@ -233,9 +240,6 @@ const Dashboard = () => {
                 </Grid>
 
               </Grid>
-
-
-
 
               <Grid container spacing={3} style={{ marginTop: '20px', display: 'flex', alignItems: 'center', borderRadius: '10px', borderStyle: 'solid', borderColor: '#728CDF', backgroundColor: ' rgba(35, 40, 75, 0.75)' }}>
 
@@ -299,14 +303,22 @@ const Dashboard = () => {
                         </button>
                       </Grid>
                       <Grid item xs={2}>
-                        <button style={{ fontSize: '15px', color: '#FFFFFF', padding: '7px', borderRadius: '20px', width: '100px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
+                        {/* <button style={{ fontSize: '15px', color: '#FFFFFF', padding: '7px', borderRadius: '20px', width: '100px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
+                          Withdraw
+                        </button> */}
+                        <button onClick={onRedeem1} style={{ fontSize: '15px', color: '#FFFFFF', padding: '7px', borderRadius: '20px', width: '100px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
                           Withdraw
                         </button>
                       </Grid>
                       <Grid item xs={2}>
-                        <button style={{ fontSize: '15px', color: '#FFFFFF', padding: '7px', borderRadius: '20px', width: '150px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
-                          Claim Rewards
-                        </button>
+                      <Button
+                          style={{ fontSize: '12px', color: '#FFFFFF', padding: '5px', borderRadius: '20px', width: '120px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}
+                          onClick={onReward}
+                          className={earnings.eq(0) || !canClaimReward ? 'shinyButtonDisabledRewards' : 'shinyButtonEnabled'}
+                          disabled={earnings.eq(0) || !canClaimReward}
+                        >
+                          Claim Reward
+                        </Button>
                       </Grid>
                     </Grid>
                   </div>
@@ -317,7 +329,7 @@ const Dashboard = () => {
                 <div style={{ margin: '20px', paddingBottom: '7px', width: '100%' }}>
                   <div style={{ fontSize: '22px', color: '#FFFFFF', display: 'flex', paddingBottom: '7px', width: '100%', borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF' }}>
                     <Grid item xs={2}>
-                    <TokenSymbolSmall symbol="BSHARE" />
+                      <TokenSymbolSmall symbol="BSHARE" />
                       BSHARE-BNB
                     </Grid>
                     <Grid item xs={2}>
@@ -326,7 +338,7 @@ const Dashboard = () => {
                       </button>
                     </Grid>
                     <Grid item xs={8} style={{ fontSize: '14px', textAlign: 'right' }}>
-                      TVL: ${statsOnPool?.TVL}
+                      TVL: ${statsOnPool2?.TVL}
                     </Grid>
                   </div>
                   <div style={{ paddingTop: '7px' }}>
@@ -338,7 +350,7 @@ const Dashboard = () => {
                         Your Stake
                         <div style={{ fontSize: '16px' }}>
                           <div style={{ display: 'flex' }}>
-                          <TokenSymbolSmall symbol="BSHARE" />
+                            <TokenSymbolSmall symbol="BSHARE" />
                             <Label text={`${getDisplayBalance(stakedBalance)}`} variant="white" />
                           </div>
                           {/* <Value value={getDisplayBalance(stakedBalance)} /> */}
@@ -348,7 +360,7 @@ const Dashboard = () => {
                       <Grid item xs={2} style={{ fontSize: '16px' }}>
                         Earned:
                         <div style={{ display: 'flex' }}>
-                        <TokenSymbolSmall symbol="BSHARE" />
+                          <TokenSymbolSmall symbol="BSHARE" />
                           <Label text={`${getDisplayBalance(earnings)}`} variant="white" />
                         </div>
                         {/* <Value value={getDisplayBalance(earnings)} /> */}
@@ -360,7 +372,7 @@ const Dashboard = () => {
                         </button>
                       </Grid>
                       <Grid item xs={2}>
-                        <button style={{ fontSize: '15px', color: '#FFFFFF', padding: '7px', borderRadius: '20px', width: '100px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
+                        <button onClick={onRedeem2} style={{ fontSize: '15px', color: '#FFFFFF', padding: '7px', borderRadius: '20px', width: '100px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
                           Withdraw
                         </button>
                       </Grid>
