@@ -1,19 +1,22 @@
-import React, { useMemo } from 'react';
+import React, { useMemo ,useCallback} from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import Bank from '../Bank';
 import moment from 'moment';
 import TokenSymbol from '../../components/TokenSymbol';
 import TokenSymbolSmall from '../../components/TokenSymbol/TokenSymbolSmall';
 import TokenSymbolMedium from '../../components/TokenSymbol/TokenSymbolSmall';
-
+import ExchangeCard from '../Bond/components/ExchangeCard';
 import Label from '../../components/Label';
 import { makeStyles } from '@material-ui/core/styles';
 import useStakedBalanceOnBoardroom from '../../hooks/useStakedBalanceOnBoardroom';
 import TokenDetails from './TokenDetails';
 import useHarvestFromBoardroom from '../../hooks/useHarvestFromBoardroom';
 import { ReactComponent as IconDiscord } from '../../assets/img/discord.svg';
+import useBondsPurchasable from '../../hooks/useBondsPurchasable';
 // import { ReactComponent as IconDown } from '../../assets/img/down-arrow-50.png';
 import useRedeem from '../../hooks/useRedeem'
+import {useTransactionAdder} from '../../state/transactions/hooks';
+
 import useBombFinance from '../../hooks/useBombFinance';
 import { Box, Card, Container, Button, CardContent, Typography, Grid } from '@material-ui/core';
 import ProgressCountdown from './components/ProgressCountdown';
@@ -31,6 +34,9 @@ import useBondStats from '../../hooks/useBondStats';
 import { createGlobalStyle } from 'styled-components';
 import useCurrentEpoch from '../../hooks/useCurrentEpoch';
 import { Helmet } from 'react-helmet';
+import useCashPriceInLastTWAP from '../../hooks/useCashPriceInLastTWAP';
+
+import { BOND_REDEEM_PRICE, BOND_REDEEM_PRICE_BN } from '../../bomb-finance/constants';
 import useClaimRewardCheck from '../../hooks/boardroom/useClaimRewardCheck';
 
 import HomeImage from '../../assets/img/background.jpg';
@@ -73,12 +79,29 @@ const Dashboard = () => {
   const bankId2 = "BombBshareLPBShareRewardPool";
   const bank = useBank(bankId);
   const bank2 = useBank(bankId2);
+  const cashPrice = useCashPriceInLastTWAP();
+  const bondsPurchasable = useBondsPurchasable();
+  const isBondRedeemable = useMemo(() => cashPrice.gt(BOND_REDEEM_PRICE_BN), [cashPrice]);
+  const addTransaction = useTransactionAdder();
   const { onRedeem1 } = useRedeem(bank);
   const { onRedeem2 } = useRedeem(bank2);
   let statsOnPool = useStatsForPool(bank);
   let statsOnPool2 = useStatsForPool(bank2);
+  const isBondPurchasable = useMemo(() => Number(bondStat?.tokenInFtm) < 1.01, [bondStat]);
+
   const scalingFactor = useMemo(() => (cashStat ? Number(cashStat.priceInDollars).toFixed(4) : null), [cashStat]);
   const earnedInDollars = (Number(tokenPriceInDollars) * Number(getDisplayBalance(earnings))).toFixed(2);
+  const handleBuyBonds = useCallback(
+
+    ////// THEEEK KRO ISEEEEEEE
+  //   async (amount: string) => {
+  //     const tx = await bombFinance.buyBonds(amount);
+  //     addTransaction(tx, {
+  //       summary: `Buy ${Number(amount).toFixed(2)} BBOND with ${amount} BOMB`,
+  //     });
+  //   },
+  //   [bombFinance, addTransaction],
+  );
   return (
     <Switch>
       <Page>
@@ -203,11 +226,11 @@ const Dashboard = () => {
                       <Grid item xs={7} style={{ fontSize: '14px', textAlign: 'right' }}>
                         TVL: ${statsOnPool?.TVL}
                       </Grid>
-                      
+
                     </div>
-                    <div style={{ fontSize: '12px', color: '#FFFFFF', display: 'flex' ,borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF' ,paddingTop:'7px',width:'97%',marginLeft:'auto'}}>
-                          Stake BSHARE and earn BOMB every epoch
-                      </div>
+                    <div style={{ fontSize: '12px', color: '#FFFFFF', display: 'flex', borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF', paddingTop: '7px', width: '97%', marginLeft: 'auto' }}>
+                      Stake BSHARE and earn BOMB every epoch
+                    </div>
                     <div>
                       <Grid container spacing={4} style={{ fontSize: '12px', color: '#FFFFFF', paddingTop: '7px' }}>
                         <Grid item xs={2}>
@@ -415,10 +438,10 @@ const Dashboard = () => {
 
                 <Grid item xs={10} style={{ padding: '20px' }}>
                   <Grid style={{ fontSize: '22px', color: '#FFFFFF' }}>
-                  <TokenSymbolMedium symbol="BBOND" />
-                  Bonds
+                    <TokenSymbolMedium symbol="BBOND" />
+                    Bonds
                   </Grid>
-                  <div style={{ fontSize: '14px', color: '#FFFFFF',paddingLeft:'10px' }}>
+                  <div style={{ fontSize: '14px', color: '#FFFFFF', paddingLeft: '10px' }}>
                     BBOND can be purchased only on contraction periods, when TWAP of BOMB is below 1
                   </div>
                 </Grid>
@@ -436,12 +459,26 @@ const Dashboard = () => {
                       <Grid item xs={4}>
                         Available to redeem:
                         <div style={{ fontSize: '36px', color: '#FFFFFF', paddingTop: '7px' }}>
-                        <TokenSymbolSmall symbol="BBOND" />{getDisplayBalance(bondBalance)}
+                          <TokenSymbolSmall symbol="BBOND" />{getDisplayBalance(bondBalance)}
                         </div>
                       </Grid>
                       <Grid item xs={4} style={{ display: 'flex' }}>
                         <Grid item xs={2}>
                           Purchase BBond
+                          <ExchangeCard
+                            action="Purchase"
+                            fromToken={bombFinance.BOMB}
+                            fromTokenName="BOMB"
+                            toToken={bombFinance.BBOND}
+                            toTokenName="BBOND"
+                            priceDesc={
+                              !isBondPurchasable
+                                ? 'BOMB is over peg'
+                                : getDisplayBalance(bondsPurchasable, 18, 4) + ' BBOND available for purchase'
+                            }
+                            onExchange={handleBuyBonds}
+                            disabled={!bondStat || isBondRedeemable}
+                          />
                         </Grid>
                         <Grid item xs={2}>
                           <button>Purchase</button>
