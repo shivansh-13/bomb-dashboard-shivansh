@@ -3,14 +3,14 @@ import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import Bank from '../Bank';
 import moment from 'moment';
 import TokenSymbol from '../../components/TokenSymbol';
-import Value from '../../components/Value';
 import Label from '../../components/Label';
 import { makeStyles } from '@material-ui/core/styles';
 import useStakedBalanceOnBoardroom from '../../hooks/useStakedBalanceOnBoardroom';
+import TokenDetails from './TokenDetails';
+import useHarvestFromBoardroom from '../../hooks/useHarvestFromBoardroom';
 
-import { Box, Card, Container, CardContent, Typography, Grid } from '@material-ui/core';
+import { Box, Card, Container,Button, CardContent, Typography, Grid } from '@material-ui/core';
 import ProgressCountdown from './components/ProgressCountdown';
-import { Alert } from '@material-ui/lab';
 import { getDisplayBalance } from '../../utils/formatBalance';
 import useTreasuryAllocationTimes from '../../hooks/useTreasuryAllocationTimes';
 import useBank from '../../hooks/useBank';
@@ -24,6 +24,8 @@ import { createGlobalStyle } from 'styled-components';
 import useCurrentEpoch from '../../hooks/useCurrentEpoch';
 import useBanks from '../../hooks/useBanks';
 import { Helmet } from 'react-helmet';
+import useClaimRewardCheck from '../../hooks/boardroom/useClaimRewardCheck';
+
 import HomeImage from '../../assets/img/background.jpg';
 const BackgroundImage = createGlobalStyle`
   body {
@@ -49,13 +51,13 @@ const Dashboard = () => {
     [bombStats],
   );
 
-  const [banks] = useBanks();
+  const canClaimReward = useClaimRewardCheck();
   const { path } = useRouteMatch();
   const { to } = useTreasuryAllocationTimes();
   const cashStat = useCashPriceInEstimatedTWAP();
   const currentEpoch = useCurrentEpoch();
   const earnings = useEarningsOnBoardroom();
-  const activeBanks = banks.filter((bank) => !bank.finished);
+  const {onReward} = useHarvestFromBoardroom();
   const classes = useStyles();
   const stakedBalance = useStakedBalanceOnBoardroom();
   const bankId = "BombBtcbLPBShareRewardPool";
@@ -78,38 +80,38 @@ const Dashboard = () => {
 
 
             <Box mt={5}>
-              <Grid container spacing={3} style={{ marginTop: '20px', display: 'flex', alignItems: 'center' }}>
+              <Grid container spacing={3} style={{ marginTop: '20px', display: 'flex',flexDirection:'row', alignItems: 'center' , borderStyle: 'none', backgroundColor: ' rgba(35, 40, 75, 0.75' }}>
                 <Grid item xs={8}>
-                  <p>Latest News</p>
+                  <TokenDetails />
                 </Grid>
                 <Grid item xs={4}>
 
-                  <Card className={classes.gridItem}>
-                    <CardContent align="center">
+                  <div className={classes.gridItem} style={{color:'white'}} >
+                    <CardContent align="center" >
                       <Typography style={{ textTransform: 'uppercase' }}>Current Epoch</Typography>
                       <Typography style={{ fontSize: '30px' }}>{Number(currentEpoch)}</Typography>
                     </CardContent>
-                  </Card>
+                  </div>
 
 
-                  <Card className={classes.gridItem}>
+                  <div className={classes.gridItem} style={{color:'white'}} >
                     <CardContent style={{ textAlign: 'center' }}>
                       <div style={{ fontSize: '30px' }}>
                         <ProgressCountdown base={moment().toDate()} hideBar={true} deadline={to} description="Next Epoch in" />
                       </div>
                       <Typography style={{ textTransform: 'uppercase' }}>Next Epoch in</Typography>
                     </CardContent>
-                  </Card>
+                  </div>
 
 
-                  <Card className={classes.gridItem}>
+                  <div className={classes.gridItem} style={{color:'white'}} >
                     <CardContent align="center">
                       <Typography style={{ textTransform: 'uppercase' }}>
                         Live TWAP: {scalingFactor}
                       </Typography>
                       <Typography>TVL: ${statsOnPool?.TVL}</Typography>
                     </CardContent>
-                  </Card>
+                  </div>
                 </Grid>
               </Grid>
 
@@ -117,11 +119,39 @@ const Dashboard = () => {
                 <Grid item xs={8}>
                   <a href="https://www.bombmoney.com/" style={{ display: 'flex', flexDirection: 'row', color: 'white', padding: '10px' }}>Read Investment Strategy </a>
                   <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <button style={{ alignSelf: 'stretch', fontSize: '25px' }}>Invest Now</button>
+                    <button style={{
+                      alignSelf: 'stretch', fontSize: '24px', backgroundColor: 'rgba(228, 26, 26, 0.2)',
+                      border: 'solid',
+                      borderColor: 'rgba(228, 26, 26, 1)', borderWidth: '0.5px'
+                    }}>Invest Now</button>
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'row' }}>
-                    <button style={{ alignSelf: 'stretch', fontSize: '25px', width: '100%', margin: '10px' }}>Chat on Discord</button>
-                    <button style={{ alignSelf: 'stretch', fontSize: '25px', width: '100%', margin: '10px' }}>Read Docs</button>
+                    <button style={
+                      {
+                        alignSelf: 'stretch',
+                        fontSize: '18px',
+                        width: '100%',
+                        marginRight: '10px',
+                        marginTop: '10px',
+                        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                        border: 'solid',
+                        borderColor: 'rgba(114, 140, 223, 1)',
+                        borderWidth: '0.5px'
+                      }
+                    }>Chat on Discord</button>
+                    <button style={
+                      {
+                        alignSelf: 'stretch',
+                        fontSize: '18px',
+                        width: '100%',
+                        marginLeft: '10px',
+                        marginTop: '10px',
+                        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                        border: 'solid',
+                        borderColor: 'rgba(114, 140, 223, 1)',
+                        borderWidth: '0.5px'
+                      }
+                    }>Read Docs</button>
                   </div>
                 </Grid>
                 <Grid item xs={4}>
@@ -161,9 +191,14 @@ const Dashboard = () => {
                           Withdraw</button>
                       </Grid>
                       <Grid item xs={2}>
-                        <button style={{ fontSize: '12px', color: '#FFFFFF', padding: '5px', borderRadius: '20px', width: '120px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
-                          Claim Rewards
-                        </button>
+                        <Button
+                          style={{ fontSize: '12px', color: '#FFFFFF', padding: '5px', borderRadius: '20px', width: '120px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}
+                          onClick={onReward}
+                          className={earnings.eq(0) || !canClaimReward ? 'shinyButtonDisabled' : 'shinyButton'}
+                          disabled={earnings.eq(0) || !canClaimReward}
+                        >
+                          Claim Reward
+                        </Button>
                       </Grid>
                     </Grid>
                   </div>
@@ -289,9 +324,14 @@ const Dashboard = () => {
                         </button>
                       </Grid>
                       <Grid item xs={2}>
-                        <button style={{ fontSize: '15px', color: '#FFFFFF', padding: '7px', borderRadius: '20px', width: '150px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
-                          Claim Rewards
-                        </button>
+                      <Button
+                          style={{ fontSize: '12px', color: '#FFFFFF', padding: '5px', borderRadius: '20px', width: '120px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}
+                          onClick={onReward}
+                          className={earnings.eq(0) || !canClaimReward ? 'shinyButtonDisabled' : 'shinyButton'}
+                          disabled={earnings.eq(0) || !canClaimReward}
+                        >
+                          Claim Reward
+                        </Button>
                       </Grid>
                     </Grid>
                   </div>
