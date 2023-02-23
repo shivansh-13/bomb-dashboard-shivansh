@@ -5,7 +5,7 @@ import useBondStats from '../../hooks/useBondStats';
 import usebShareStats from '../../hooks/usebShareStats';
 import { roundAndFormatNumber } from '../../0x';
 import MetamaskFox from '../../assets/img/metamask-fox.svg';
-import { Box, Button,  Grid } from '@material-ui/core';
+import { Box, Button, Typography, Grid } from '@material-ui/core';
 import useBombFinance from '../../hooks/useBombFinance';
 const TokenDetails = () => {
     // const classes = useStyles();
@@ -41,37 +41,38 @@ const TokenDetails = () => {
     );
     const tBondTotalSupply = useMemo(() => (tBondStats ? String(tBondStats.totalSupply) : null), [tBondStats]);
     return (
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div style={{ display: 'flex', flexDirection: 'column' ,paddingLeft:'60px'}}>
             {/* BOMB */}
+            
             <div style={{ display: 'flex', flexDirection: 'row', color: 'white' }}>
                 <Grid item xs={2}></Grid>
-                <Grid item xs={2} style={{ borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF',paddingBottom:'7px',fontsize:'12px'}}>Current Supply</Grid>
-                <Grid item xs={2} style={{ borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF',paddingBottom:'7px',fontsize:'12px'}}>Total Supply</Grid>
-                <Grid item xs={2} style={{ borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF',paddingBottom:'7px',fontsize:'12px'}}>Price</Grid>
-                <Grid item xs={2} style={{ borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF',paddingBottom:'7px',fontsize:'12px'}}></Grid>
+                <Grid item xs={2} style={{ borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF', paddingBottom: '7px', fontsize: '12px' }}>Current Supply</Grid>
+                <Grid item xs={2} style={{ borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF', paddingBottom: '7px', fontsize: '12px' }}>Total Supply</Grid>
+                <Grid item xs={2} style={{ borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF', paddingBottom: '7px', fontsize: '12px' }}>Price</Grid>
+                <Grid item xs={2} style={{ borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF', paddingBottom: '7px', fontsize: '12px' }}></Grid>
             </div>
             < Grid item xs={12} sm={12} >
-                <div style={{ display: 'flex', flexDirection: 'row', color: 'white',padding:'7px' }}>
+                <div style={{ display: 'flex', flexDirection: 'row', color: 'white', padding: '7px' }}>
                     {/* <CardContent align="center" style={{ position: 'relative' }}> */}
-                    <Grid item xs={2}>
+                    <Grid item xs={2} style={{ borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF', paddingBottom: '7px', fontsize: '12px' }}>
                         <TokenSymbolSmall symbol="BOMB" />
                         BOMB
                     </Grid>
                     {/* <h2 style={{ marginBottom: '10px' }}>BOMB</h2> */}
                     {/* 10,000 BOMB (1.0 Peg) = */}
-                    <Grid item xs={2}>
+                    <Grid item xs={2} style={{ borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF', paddingBottom: '7px', fontsize: '12px' }}>
                         <span style={{ fontSize: '16px' }}>
                             {roundAndFormatNumber(bombCirculatingSupply, 2)}
                         </span>
                     </Grid>
-                    <Grid item xs={2}>
+                    <Grid item xs={2} style={{ borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF', paddingBottom: '7px', fontsize: '12px' }}>
                         <Box>
                             <span style={{ fontSize: '16px' }}>
                                 {roundAndFormatNumber(bombTotalSupply, 2)}
                             </span>
                         </Box>
                     </Grid>
-                    <Grid item xs={2}>
+                    <Grid item xs={2} style={{ borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF', paddingBottom: '7px', fontsize: '12px' }}>
                         <span style={{ fontSize: '16px', alignContent: 'flex-start' }}>
                             ${bombPriceInDollars ? roundAndFormatNumber(bombPriceInDollars, 2) : '-.--'} / BOMB
                         </span>
@@ -80,7 +81,7 @@ const TokenDetails = () => {
                             Total Supply: {roundAndFormatNumber(bombTotalSupply, 2)}
                         </span> */}
                     </Grid>
-                    <Grid item xs={2}>
+                    <Grid item xs={2} style={{ borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF', paddingBottom: '7px', fontsize: '12px' }}>
                         <Button
                             onClick={() => {
                                 bombFinance.watchAssetInMetamask('BOMB');
@@ -97,23 +98,23 @@ const TokenDetails = () => {
             </Grid >
 
             {/* BSHARE */}
-            < Grid item xs={12} sm={12} >
-                <div style={{ display: 'flex', flexDirection: 'row', color: 'white' ,padding:'7px'}}>
+            < Grid item xs={12} sm={12}  >
+                <div style={{ display: 'flex', flexDirection: 'row', color: 'white', padding: '7px' }}>
                     {/* <CardContent align="center" style={{ position: 'relative' }}> */}
 
-                    <Grid item xs={2}>
+                    <Grid item xs={2} style={{ borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF', paddingBottom: '7px', fontsize: '12px' }}>
                         <TokenSymbolSmall symbol="BSHARE" />
                         BSHARE
                     </Grid>
                     {/* <h2 style={{ marginBottom: '10px' }}>BSHARE</h2> */}
                     {/* Current Price */}
-                    <Grid item xs={2}>
+                    <Grid item xs={2} style={{ borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF', paddingBottom: '7px', fontsize: '12px' }}>
                         {roundAndFormatNumber(bShareCirculatingSupply, 2)}
                     </Grid>
-                    <Grid item xs={2}>
+                    <Grid item xs={2} style={{ borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF', paddingBottom: '7px', fontsize: '12px' }}>
                         {roundAndFormatNumber(bShareTotalSupply, 2)}
                     </Grid>
-                    <Grid item xs={2}>
+                    <Grid item xs={2} style={{ borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF', paddingBottom: '7px', fontsize: '12px' }}>
                         <Box>
 
                             <span style={{ fontSize: '16px' }}>
@@ -123,7 +124,7 @@ const TokenDetails = () => {
                         </Box>
 
                     </Grid>
-                    <Grid item xs={2}>
+                    <Grid item xs={2} style={{ borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF', paddingBottom: '7px', fontsize: '12px' }}>
                         <Button
                             onClick={() => {
                                 bombFinance.watchAssetInMetamask('BSHARE');
@@ -141,30 +142,30 @@ const TokenDetails = () => {
 
             {/* BBOND */}
             < Grid item xs={12} sm={12} >
-                <div style={{ display: 'flex', flexDirection: 'row', color: 'white',padding:'7px' }}>
+                <div style={{ display: 'flex', flexDirection: 'row', color: 'white', padding: '7px' }}>
                     {/* <CardContent align="center" style={{ position: 'relative' }}> */}
-                    <Grid item xs={2}>
+                    <Grid item xs={2} >
                         <TokenSymbolSmall symbol="BBOND" />
                         BBOND
                     </Grid>
-                    <Grid item xs={2}>
+                    <Grid item xs={2} style={{ borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF', paddingBottom: '7px', fontsize: '12px' }}>
                         <span style={{ fontSize: '16px' }}>
                             {roundAndFormatNumber(tBondCirculatingSupply, 2)}
                         </span>
                     </Grid>
-                    <Grid item xs={2}>
+                    <Grid item xs={2} style={{ borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF', paddingBottom: '7px', fontsize: '12px' }}>
                         <span style={{ fontSize: '16px' }}>
                             {roundAndFormatNumber(tBondTotalSupply, 2)}
                         </span>
 
                     </Grid>
-                    <Grid item xs={2}>
+                    <Grid item xs={2} style={{ borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF', paddingBottom: '7px', fontsize: '12px' }}>
                         <Box>
                             <span style={{ fontSize: '16px' }}>${tBondPriceInDollars ? tBondPriceInDollars : '-.--'} / BBOND</span>
                         </Box>
 
                     </Grid>
-                    <Grid item xs={2}>
+                    <Grid item xs={2} style={{ borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF', paddingBottom: '7px', fontsize: '12px' }}>
 
                         <Button
                             onClick={() => {

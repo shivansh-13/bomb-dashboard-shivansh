@@ -3,13 +3,15 @@ import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import Bank from '../Bank';
 import moment from 'moment';
 import TokenSymbol from '../../components/TokenSymbol';
+import TokenSymbolSmall from '../../components/TokenSymbol/TokenSymbolSmall';
 import Label from '../../components/Label';
 import { makeStyles } from '@material-ui/core/styles';
 import useStakedBalanceOnBoardroom from '../../hooks/useStakedBalanceOnBoardroom';
 import TokenDetails from './TokenDetails';
 import useHarvestFromBoardroom from '../../hooks/useHarvestFromBoardroom';
-
-import { Box, Card, Container,Button, CardContent, Typography, Grid } from '@material-ui/core';
+import { ReactComponent as IconDiscord } from '../../assets/img/discord.svg';
+import { ReactComponent as IconDown } from '../../assets/img/down-arrow-50.png';
+import { Box, Card, Container, Button, CardContent, Typography, Grid } from '@material-ui/core';
 import ProgressCountdown from './components/ProgressCountdown';
 import { getDisplayBalance } from '../../utils/formatBalance';
 import useTreasuryAllocationTimes from '../../hooks/useTreasuryAllocationTimes';
@@ -22,7 +24,6 @@ import useBombStats from '../../hooks/useBombStats';
 //import FarmImage from '../../assets/img/farm.png';
 import { createGlobalStyle } from 'styled-components';
 import useCurrentEpoch from '../../hooks/useCurrentEpoch';
-import useBanks from '../../hooks/useBanks';
 import { Helmet } from 'react-helmet';
 import useClaimRewardCheck from '../../hooks/boardroom/useClaimRewardCheck';
 
@@ -57,7 +58,7 @@ const Dashboard = () => {
   const cashStat = useCashPriceInEstimatedTWAP();
   const currentEpoch = useCurrentEpoch();
   const earnings = useEarningsOnBoardroom();
-  const {onReward} = useHarvestFromBoardroom();
+  const { onReward } = useHarvestFromBoardroom();
   const classes = useStyles();
   const stakedBalance = useStakedBalanceOnBoardroom();
   const bankId = "BombBtcbLPBShareRewardPool";
@@ -74,45 +75,52 @@ const Dashboard = () => {
             <title>{TITLE}</title>
           </Helmet>
           <Container maxWidth="lg">
-            <Typography color="textPrimary" align="center" variant="h3" gutterBottom>
+            {/* <Typography color="textPrimary" align="center" variant="h3" gutterBottom>
               Bomb Finance Summary
-            </Typography>
+            </Typography> */}
 
 
             <Box mt={5}>
-              <Grid container spacing={3} style={{ marginTop: '20px', display: 'flex',flexDirection:'row', alignItems: 'center' , borderStyle: 'none', backgroundColor: ' rgba(35, 40, 75, 0.75' }}>
+              <Grid container spacing={3} style={{ marginTop: '20px', display: 'flex', flexDirection: 'column',  borderStyle: 'none', backgroundColor: ' rgba(35, 40, 75, 0.75' }}>
+              <Typography color="textPrimary" align="center" variant="h4" gutterBottom style={{marginLeft:'10%',width:'80%',paddingTop:'10px', borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF', paddingBottom: '7px'}}>  
+                    Bomb Finance Summary
+                </Typography>
+               <Grid  style={{display: 'flex', flexDirection: 'row', alignItems: 'center',paddingLeft:'10px', paddingRight:'10px' }}>
                 <Grid item xs={8}>
                   <TokenDetails />
                 </Grid>
                 <Grid item xs={4}>
 
-                  <div className={classes.gridItem} style={{color:'white'}} >
+                  <div className={classes.gridItem} style={{ color: 'white' }} >
                     <CardContent align="center" >
-                      <Typography style={{ textTransform: 'uppercase' }}>Current Epoch</Typography>
+                      <Typography style={{}}>Current Epoch</Typography>
                       <Typography style={{ fontSize: '30px' }}>{Number(currentEpoch)}</Typography>
                     </CardContent>
                   </div>
 
 
-                  <div className={classes.gridItem} style={{color:'white'}} >
+                  <div className={classes.gridItem} style={{ color: 'white' }} >
                     <CardContent style={{ textAlign: 'center' }}>
                       <div style={{ fontSize: '30px' }}>
                         <ProgressCountdown base={moment().toDate()} hideBar={true} deadline={to} description="Next Epoch in" />
                       </div>
-                      <Typography style={{ textTransform: 'uppercase' }}>Next Epoch in</Typography>
+                      <Typography style={{}}>Next Epoch in</Typography>
                     </CardContent>
                   </div>
 
 
-                  <div className={classes.gridItem} style={{color:'white'}} >
+                  <div className={classes.gridItem} style={{ color: 'white' }} >
                     <CardContent align="center">
-                      <Typography style={{ textTransform: 'uppercase' }}>
-                        Live TWAP: {scalingFactor}
+                      <Typography style={{ color: 'rgba(0, 232, 162, 1)' }}>
+                        Live TWAP:{scalingFactor}
                       </Typography>
-                      <Typography>TVL: ${statsOnPool?.TVL}</Typography>
+                      <Typography style={{ color: 'rgba(0, 232, 162, 1)' }}>
+                        TVL: ${statsOnPool?.TVL}
+                      </Typography>
                     </CardContent>
                   </div>
                 </Grid>
+              </Grid>
               </Grid>
 
               <Grid container spacing={3} style={{ marginTop: '20px', marginBottom: '20px', display: 'flex', alignItems: 'center' }}>
@@ -120,9 +128,10 @@ const Dashboard = () => {
                   <a href="https://www.bombmoney.com/" style={{ display: 'flex', flexDirection: 'row', color: 'white', padding: '10px' }}>Read Investment Strategy </a>
                   <div style={{ display: 'flex', flexDirection: 'column' }}>
                     <button style={{
-                      alignSelf: 'stretch', fontSize: '24px', backgroundColor: 'rgba(228, 26, 26, 0.2)',
-                      border: 'solid',
-                      borderColor: 'rgba(228, 26, 26, 1)', borderWidth: '0.5px'
+                      alignSelf: 'stretch', fontSize: '24px', backgroundColor: 'rgba(180, 225, 245, 0.50)',
+                      border: 'solid', color: 'white',
+                      borderColor: 'rgba(228, 26, 26, 1)', borderWidth: '0.5px', paddingTop: '7px',
+                      paddingBottom: '7px'
                     }}>Invest Now</button>
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -136,9 +145,12 @@ const Dashboard = () => {
                         backgroundColor: 'rgba(255, 255, 255, 0.5)',
                         border: 'solid',
                         borderColor: 'rgba(114, 140, 223, 1)',
-                        borderWidth: '0.5px'
+                        borderWidth: '0.5px',
+                        marginBottom: '10px',
+                        paddingTop: '7px',
+                        paddingBottom: '7px'
                       }
-                    }>Chat on Discord</button>
+                    }> <IconDiscord style={{ fill: '#dddfee', height: '20px' }} />Chat on Discord</button>
                     <button style={
                       {
                         alignSelf: 'stretch',
@@ -149,60 +161,77 @@ const Dashboard = () => {
                         backgroundColor: 'rgba(255, 255, 255, 0.5)',
                         border: 'solid',
                         borderColor: 'rgba(114, 140, 223, 1)',
-                        borderWidth: '0.5px'
+                        borderWidth: '0.5px',
+                        marginBottom: '10px'
                       }
-                    }>Read Docs</button>
+                    }>  <a
+                      style={{ textDecoration: 'none', color:'black' }}
+                      href="https://docs.bomb.money"
+                      // className={'navLink ' + classes.link}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                        Read Docs
+                      </a></button>
+                  </div>
+                  <div style={{ padding: '20px', borderRadius: '10px', borderStyle: 'solid', borderColor: '#728CDF', backgroundColor: ' rgba(35, 40, 75, 0.75)' }}>
+                    <div style={{ fontSize: '22px', color: '#FFFFFF', display: 'flex' }}>
+                      <Grid item xs={3}>
+                        <TokenSymbol size={22} symbol={bank.depositTokenName} />
+                        BOMB-BTCB
+                      </Grid>
+                      <Grid item xs={2}>
+                        <button style={{ fontSize: '12px', borderRadius: '3px', color: '#FFFFFF', paddingLeft: '10px', paddingRight: '10px', gap: '10px', background: 'rgba(0, 232, 162, 0.5)', borderStyle: 'none' }}>
+                          Recommended
+                        </button>
+                      </Grid>
+                      <Grid item xs={7} style={{ fontSize: '14px', textAlign: 'right' }}>
+                        TVL: ${statsOnPool?.TVL}
+                      </Grid>
+                    </div>
+                    <div>
+                      <Grid container spacing={4} style={{ fontSize: '12px', color: '#FFFFFF', paddingTop: '7px' }}>
+                        <Grid item xs={2}>
+                          Daily returns: 2%
+                        </Grid>
+                        <Grid item xs={2}>
+                          Your Stake
+                        </Grid>
+                        <Grid item xs={2}>
+                          Earned
+                        </Grid>
+                        <Grid item xs={2}>
+                          <button style={{ fontSize: '12px', color: '#FFFFFF', padding: '5px', borderRadius: '20px', width: '100px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }} >
+                          {/* <IconDown style={{ fill: '#dddfee', height: '20px' }} /> */}
+                          Deposit</button>
+                        </Grid>
+                        <Grid item xs={2}>
+                          <button style={{ fontSize: '12px', color: '#FFFFFF', padding: '5px', borderRadius: '20px', width: '100px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
+                            Withdraw</button>
+                        </Grid>
+                        <Grid item xs={2}>
+                          <Button
+                            style={{ fontSize: '12px', color: '#FFFFFF', padding: '5px', borderRadius: '20px', width: '120px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}
+                            onClick={onReward}
+                            className={earnings.eq(0) || !canClaimReward ? 'shinyButtonDisabledRewards' : 'shinyButtonEnabled'}
+                            disabled={earnings.eq(0) || !canClaimReward}
+                          >
+                          {/* shinyButtonEnabled */}
+                            Claim Reward
+                          </Button>
+                        </Grid>
+                      </Grid>
+                    </div>
                   </div>
                 </Grid>
                 <Grid item xs={4}>
-
                   <Card style={{ borderRadius: '10px', borderStyle: 'solid', borderColor: '#728CDF', backgroundColor: ' rgba(35, 40, 75, 0.75)' }}>
                     <CardContent style={{ textAlign: 'left' }}>
                       <Typography >Latest News</Typography>
                     </CardContent>
                   </Card>
                 </Grid>
-                <div style={{ padding: '20px', borderRadius: '10px', borderStyle: 'solid', borderColor: '#728CDF', backgroundColor: ' rgba(35, 40, 75, 0.75)' }}>
-                  <div style={{ fontSize: '22px', color: '#FFFFFF', display: 'flex' }}>
-                    <TokenSymbol size={22} symbol={bank.depositTokenName} />
-                    BOMB-BTCB
-                    <button style={{ fontSize: '12px', borderRadius: '3px', color: '#FFFFFF', paddingLeft: '10px', paddingRight: '10px', gap: '10px', background: 'rgba(0, 232, 162, 0.5)', borderStyle: 'none' }}>
-                      Recommended
-                    </button>
-                    <Typography>TVL: ${statsOnPool?.TVL}</Typography>
-                  </div>
-                  <div>
-                    <Grid container spacing={4} style={{ fontSize: '12px', color: '#FFFFFF', paddingTop: '7px' }}>
-                      <Grid item xs={2}>
-                        Daily returns: 2%
-                      </Grid>
-                      <Grid item xs={2}>
-                        Your Stake
-                      </Grid>
-                      <Grid item xs={2}>
-                        Earned
-                      </Grid>
-                      <Grid item xs={2}>
-                        <button style={{ fontSize: '12px', color: '#FFFFFF', padding: '5px', borderRadius: '20px', width: '100px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }} >
-                          Deposit</button>
-                      </Grid>
-                      <Grid item xs={2}>
-                        <button style={{ fontSize: '12px', color: '#FFFFFF', padding: '5px', borderRadius: '20px', width: '100px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
-                          Withdraw</button>
-                      </Grid>
-                      <Grid item xs={2}>
-                        <Button
-                          style={{ fontSize: '12px', color: '#FFFFFF', padding: '5px', borderRadius: '20px', width: '120px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}
-                          onClick={onReward}
-                          className={earnings.eq(0) || !canClaimReward ? 'shinyButtonDisabled' : 'shinyButton'}
-                          disabled={earnings.eq(0) || !canClaimReward}
-                        >
-                          Claim Reward
-                        </Button>
-                      </Grid>
-                    </Grid>
-                  </div>
-                </div>
+
               </Grid>
 
 
@@ -228,12 +257,18 @@ const Dashboard = () => {
 
                 <div style={{ margin: '20px', paddingBottom: '7px', width: '100%' }}>
                   <div style={{ fontSize: '22px', color: '#FFFFFF', display: 'flex', paddingBottom: '7px', width: '100%', borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF' }}>
-                    <TokenSymbol size={22} symbol={bank.depositTokenName} />
-                    BOMB-BTCB
-                    <button style={{ fontSize: '12px', borderRadius: '3px', color: '#FFFFFF', paddingLeft: '10px', paddingRight: '10px', gap: '10px', background: 'rgba(0, 232, 162, 0.5)', borderStyle: 'none' }}>
-                      Recommended
-                    </button>
-                    <Typography>TVL: ${statsOnPool?.TVL}</Typography>
+                    <Grid item xs={2}>
+                      <TokenSymbol size={22} symbol={bank.depositTokenName} />
+                      BOMB-BTCB
+                    </Grid>
+                    <Grid item xs={2}>
+                      <button style={{ fontSize: '12px', borderRadius: '3px', color: '#FFFFFF', paddingLeft: '10px', paddingRight: '10px', gap: '10px', background: 'rgba(0, 232, 162, 0.5)', borderStyle: 'none' }}>
+                        Recommended
+                      </button>
+                    </Grid>
+                    <Grid item xs={8} style={{ fontSize: '14px', textAlign: 'right' }}>
+                      TVL: ${statsOnPool?.TVL}
+                    </Grid>
                   </div>
                   <div>
                     <Grid container spacing={3} style={{ paddingTop: '7px', fontSize: '12px', color: '#FFFFFF' }}>
@@ -281,12 +316,18 @@ const Dashboard = () => {
                 <div style={{ width: '100%', borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#00ADE8' }} />
                 <div style={{ margin: '20px', paddingBottom: '7px', width: '100%' }}>
                   <div style={{ fontSize: '22px', color: '#FFFFFF', display: 'flex', paddingBottom: '7px', width: '100%', borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF' }}>
-                    <TokenSymbol size={22} symbol={bank.depositTokenName} />
-                    BSHARE-BNB
-                    <button style={{ fontSize: '12px', borderRadius: '3px', color: '#FFFFFF', paddingLeft: '10px', paddingRight: '10px', gap: '10px', background: 'rgba(0, 232, 162, 0.5)', borderStyle: 'none' }}>
-                      Recommended
-                    </button>
-                    <Typography>TVL: ${statsOnPool?.TVL}</Typography>
+                    <Grid item xs={2}>
+                    <TokenSymbolSmall symbol="BSHARE" />
+                      BSHARE-BNB
+                    </Grid>
+                    <Grid item xs={2}>
+                      <button style={{ fontSize: '12px', borderRadius: '3px', color: '#FFFFFF', paddingLeft: '10px', paddingRight: '10px', gap: '10px', background: 'rgba(0, 232, 162, 0.5)', borderStyle: 'none' }}>
+                        Recommended
+                      </button>
+                    </Grid>
+                    <Grid item xs={8} style={{ fontSize: '14px', textAlign: 'right' }}>
+                      TVL: ${statsOnPool?.TVL}
+                    </Grid>
                   </div>
                   <div style={{ paddingTop: '7px' }}>
                     <Grid container spacing={3} style={{ fontSize: '12px', color: '#FFFFFF' }}>
@@ -297,7 +338,7 @@ const Dashboard = () => {
                         Your Stake
                         <div style={{ fontSize: '16px' }}>
                           <div style={{ display: 'flex' }}>
-                            <TokenSymbol size={22} symbol={bank.depositTokenName} />
+                          <TokenSymbolSmall symbol="BSHARE" />
                             <Label text={`${getDisplayBalance(stakedBalance)}`} variant="white" />
                           </div>
                           {/* <Value value={getDisplayBalance(stakedBalance)} /> */}
@@ -307,7 +348,7 @@ const Dashboard = () => {
                       <Grid item xs={2} style={{ fontSize: '16px' }}>
                         Earned:
                         <div style={{ display: 'flex' }}>
-                          <TokenSymbol size={22} symbol={bank.depositTokenName} />
+                        <TokenSymbolSmall symbol="BSHARE" />
                           <Label text={`${getDisplayBalance(earnings)}`} variant="white" />
                         </div>
                         {/* <Value value={getDisplayBalance(earnings)} /> */}
@@ -324,10 +365,10 @@ const Dashboard = () => {
                         </button>
                       </Grid>
                       <Grid item xs={2}>
-                      <Button
+                        <Button
                           style={{ fontSize: '12px', color: '#FFFFFF', padding: '5px', borderRadius: '20px', width: '120px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}
                           onClick={onReward}
-                          className={earnings.eq(0) || !canClaimReward ? 'shinyButtonDisabled' : 'shinyButton'}
+                          className={earnings.eq(0) || !canClaimReward ? 'shinyButtonDisabledRewards' : 'shinyButtonEnabled'}
                           disabled={earnings.eq(0) || !canClaimReward}
                         >
                           Claim Reward
