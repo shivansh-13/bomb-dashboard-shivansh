@@ -4,6 +4,8 @@ import Bank from '../Bank';
 import moment from 'moment';
 import TokenSymbol from '../../components/TokenSymbol';
 import TokenSymbolSmall from '../../components/TokenSymbol/TokenSymbolSmall';
+import TokenSymbolMedium from '../../components/TokenSymbol/TokenSymbolSmall';
+
 import Label from '../../components/Label';
 import { makeStyles } from '@material-ui/core/styles';
 import useStakedBalanceOnBoardroom from '../../hooks/useStakedBalanceOnBoardroom';
@@ -12,16 +14,19 @@ import useHarvestFromBoardroom from '../../hooks/useHarvestFromBoardroom';
 import { ReactComponent as IconDiscord } from '../../assets/img/discord.svg';
 // import { ReactComponent as IconDown } from '../../assets/img/down-arrow-50.png';
 import useRedeem from '../../hooks/useRedeem'
+import useBombFinance from '../../hooks/useBombFinance';
 import { Box, Card, Container, Button, CardContent, Typography, Grid } from '@material-ui/core';
 import ProgressCountdown from './components/ProgressCountdown';
 import { getDisplayBalance } from '../../utils/formatBalance';
 import useTreasuryAllocationTimes from '../../hooks/useTreasuryAllocationTimes';
 import useBank from '../../hooks/useBank';
+import useTokenBalance from '../../hooks/useTokenBalance';
 import useStatsForPool from '../../hooks/useStatsForPool';
 import useCashPriceInEstimatedTWAP from '../../hooks/useCashPriceInEstimatedTWAP';
 import useEarningsOnBoardroom from '../../hooks/useEarningsOnBoardroom';
 import Page from '../../components/Page';
 import useBombStats from '../../hooks/useBombStats';
+import useBondStats from '../../hooks/useBondStats';
 //import FarmImage from '../../assets/img/farm.png';
 import { createGlobalStyle } from 'styled-components';
 import useCurrentEpoch from '../../hooks/useCurrentEpoch';
@@ -52,7 +57,9 @@ const Dashboard = () => {
     () => (bombStats ? Number(bombStats.priceInDollars).toFixed(2) : null),
     [bombStats],
   );
-
+  const bondStat = useBondStats();
+  const bombFinance = useBombFinance();
+  const bondBalance = useTokenBalance(bombFinance?.BBOND);
   const canClaimReward = useClaimRewardCheck();
   const { path } = useRouteMatch();
   const { to } = useTreasuryAllocationTimes();
@@ -183,9 +190,11 @@ const Dashboard = () => {
                   <div style={{ padding: '20px', borderRadius: '10px', borderStyle: 'solid', borderColor: '#728CDF', backgroundColor: ' rgba(35, 40, 75, 0.75)' }}>
                     <div style={{ fontSize: '22px', color: '#FFFFFF', display: 'flex' }}>
                       <Grid item xs={3}>
-                        <TokenSymbol size={22} symbol={bank.depositTokenName} />
-                        BOMB-BTCB
+                        {/* <TokenSymbol size={22} symbol={bank.depositTokenName} /> */}
+                        <TokenSymbolMedium symbol="BSHARE" />
+                        Boardroom
                       </Grid>
+
                       <Grid item xs={2}>
                         <button style={{ fontSize: '12px', borderRadius: '3px', color: '#FFFFFF', paddingLeft: '10px', paddingRight: '10px', gap: '10px', background: 'rgba(0, 232, 162, 0.5)', borderStyle: 'none' }}>
                           Recommended
@@ -194,7 +203,11 @@ const Dashboard = () => {
                       <Grid item xs={7} style={{ fontSize: '14px', textAlign: 'right' }}>
                         TVL: ${statsOnPool?.TVL}
                       </Grid>
+                      
                     </div>
+                    <div style={{ fontSize: '12px', color: '#FFFFFF', display: 'flex' ,borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF' ,paddingTop:'7px',width:'97%',marginLeft:'auto'}}>
+                          Stake BSHARE and earn BOMB every epoch
+                      </div>
                     <div>
                       <Grid container spacing={4} style={{ fontSize: '12px', color: '#FFFFFF', paddingTop: '7px' }}>
                         <Grid item xs={2}>
@@ -247,7 +260,7 @@ const Dashboard = () => {
                   <div style={{ fontSize: '22px', color: '#FFFFFF' }}>
                     Bomb Farms
                   </div>
-                  <div style={{ fontSize: '14px', color: '#FFFFFF' }}>
+                  <div style={{ fontSize: '14px', color: '#FFFFFF', }}>
                     Stake your LP tokens in our farms to start earning $BSHARE
                   </div>
                 </Grid>
@@ -311,7 +324,7 @@ const Dashboard = () => {
                         </button>
                       </Grid>
                       <Grid item xs={2}>
-                      <Button
+                        <Button
                           style={{ fontSize: '12px', color: '#FFFFFF', padding: '5px', borderRadius: '20px', width: '120px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}
                           onClick={onReward}
                           className={earnings.eq(0) || !canClaimReward ? 'shinyButtonDisabledRewards' : 'shinyButtonEnabled'}
@@ -401,10 +414,11 @@ const Dashboard = () => {
               <Grid container spacing={3} style={{ marginTop: '20px', display: 'flex', alignItems: 'center', borderRadius: '10px', borderStyle: 'solid', borderColor: '#728CDF', backgroundColor: ' rgba(35, 40, 75, 0.75)' }}>
 
                 <Grid item xs={10} style={{ padding: '20px' }}>
-                  <div style={{ fontSize: '22px', color: '#FFFFFF' }}>
-                    Bonds
-                  </div>
-                  <div style={{ fontSize: '14px', color: '#FFFFFF' }}>
+                  <Grid style={{ fontSize: '22px', color: '#FFFFFF' }}>
+                  <TokenSymbolMedium symbol="BBOND" />
+                  Bonds
+                  </Grid>
+                  <div style={{ fontSize: '14px', color: '#FFFFFF',paddingLeft:'10px' }}>
                     BBOND can be purchased only on contraction periods, when TWAP of BOMB is below 1
                   </div>
                 </Grid>
@@ -413,11 +427,17 @@ const Dashboard = () => {
                     <Grid container spacing={3} style={{ fontSize: '12px', color: '#FFFFFF' }}>
                       <Grid item xs={4}>
                         Current Price: (Bomb)^2
-                        <p>BBond = </p>
+                        <div style={{ fontSize: '16px', color: '#FFFFFF', paddingTop: '7px' }}>
+                          {/* tokenName="10,000 BBOND" */}
+                          {/* description="Current Price: (BOMB)^2" */}
+                          10,000 BBond={Number(bondStat?.tokenInFtm).toFixed(4) || '-'} BTCB
+                        </div>
                       </Grid>
                       <Grid item xs={4}>
                         Available to redeem:
-
+                        <div style={{ fontSize: '36px', color: '#FFFFFF', paddingTop: '7px' }}>
+                        <TokenSymbolSmall symbol="BBOND" />{getDisplayBalance(bondBalance)}
+                        </div>
                       </Grid>
                       <Grid item xs={4} style={{ display: 'flex' }}>
                         <Grid item xs={2}>
