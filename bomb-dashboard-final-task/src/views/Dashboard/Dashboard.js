@@ -1,4 +1,4 @@
-import React, { useMemo ,useCallback} from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import Bank from '../Bank';
 import moment from 'moment';
@@ -8,16 +8,16 @@ import TokenSymbolMedium from '../../components/TokenSymbol/TokenSymbolSmall';
 import ExchangeCard from '../Bond/components/ExchangeCard';
 import Label from '../../components/Label';
 import { makeStyles } from '@material-ui/core/styles';
+import IconButton from '../../components/IconButton';
 import useStakedBalanceOnBoardroom from '../../hooks/useStakedBalanceOnBoardroom';
 import TokenDetails from './TokenDetails';
+import { AddIcon, RemoveIcon } from '../../components/icons';
 import useHarvestFromBoardroom from '../../hooks/useHarvestFromBoardroom';
 import { ReactComponent as IconDiscord } from '../../assets/img/discord.svg';
 import useBondsPurchasable from '../../hooks/useBondsPurchasable';
-// import { ReactComponent as IconDown } from '../../assets/img/down-arrow-50.png';
 import useRedeem from '../../hooks/useRedeem'
 import useRedeem2 from '../../hooks/useRedeem2'
-import {useTransactionAdder} from '../../state/transactions/hooks';
-import useRedeemOnBoardroom from '../../hooks/useRedeemOnBoardroom';
+import { useTransactionAdder } from '../../state/transactions/hooks';
 import useBombFinance from '../../hooks/useBombFinance';
 import { Box, Card, Container, Button, CardContent, Typography, Grid } from '@material-ui/core';
 import ProgressCountdown from './components/ProgressCountdown';
@@ -31,16 +31,17 @@ import useEarningsOnBoardroom from '../../hooks/useEarningsOnBoardroom';
 import Page from '../../components/Page';
 import useBombStats from '../../hooks/useBombStats';
 import useBondStats from '../../hooks/useBondStats';
-//import FarmImage from '../../assets/img/farm.png';
 import { createGlobalStyle } from 'styled-components';
 import useCurrentEpoch from '../../hooks/useCurrentEpoch';
 import { Helmet } from 'react-helmet';
 import useCashPriceInLastTWAP from '../../hooks/useCashPriceInLastTWAP';
-
+import DepositModal from '../Bank/components/DepositModal';
+import useModal from '../../hooks/useModal';
+import useStake from '../../hooks/useStake';
 import useWithdrawCheck from '../../hooks/boardroom/useWithdrawCheck';
 import { BOND_REDEEM_PRICE, BOND_REDEEM_PRICE_BN } from '../../bomb-finance/constants';
 import useClaimRewardCheck from '../../hooks/boardroom/useClaimRewardCheck';
-
+// import useTokenBalance from '../../../hooks/useTokenBalance';
 import HomeImage from '../../assets/img/background.jpg';
 const BackgroundImage = createGlobalStyle`
   body {
@@ -104,6 +105,33 @@ const Dashboard = () => {
     },
     [bombFinance, addTransaction]
   );
+  const { onStake } = useStake(bank_BTC)
+  const tokenBalance = useTokenBalance(bank_BTC.depositToken);
+  ;
+  const [onPresentDeposit, onDismissDeposit] = useModal(
+    <DepositModal
+      max={tokenBalance}
+      decimals={bank_BTC.depositToken.decimal}
+      onConfirm={(amount) => {
+        if (Number(amount) <= 0 || isNaN(Number(amount))) return;
+        onStake(amount);
+        onDismissDeposit();
+      }}
+      tokenName={bank_BTC.depositTokenName}
+    />,
+  );
+  const [onPresentDeposit2, onDismissDeposit2] = useModal(
+    <DepositModal
+      max={tokenBalance}
+      decimals={bank_bshare.depositToken.decimal}
+      onConfirm={(amount) => {
+        if (Number(amount) <= 0 || isNaN(Number(amount))) return;
+        onStake(amount);
+        onDismissDeposit2();
+      }}
+      tokenName={bank_bshare.depositTokenName}
+    />,
+  );
   return (
     <Switch>
       <Page>
@@ -113,11 +141,6 @@ const Dashboard = () => {
             <title>{TITLE}</title>
           </Helmet>
           <Container maxWidth="lg">
-            {/* <Typography color="textPrimary" align="center" variant="h3" gutterBottom>
-              Bomb Finance Summary
-            </Typography> */}
-
-
             <Box mt={5}>
               <Grid container spacing={3} style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', borderStyle: 'none', backgroundColor: ' rgba(35, 40, 75, 0.75' }}>
                 <Typography color="textPrimary" align="center" variant="h4" gutterBottom style={{ marginLeft: '10%', width: '80%', paddingTop: '10px', borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF', paddingBottom: '7px' }}>
@@ -145,8 +168,6 @@ const Dashboard = () => {
                         <Typography style={{}}>Next Epoch in</Typography>
                       </CardContent>
                     </div>
-
-
                     <div className={classes.gridItem} style={{ color: 'white' }} >
                       <CardContent align="center">
                         <Typography style={{ color: 'rgba(0, 232, 162, 1)' }}>
@@ -160,7 +181,6 @@ const Dashboard = () => {
                   </Grid>
                 </Grid>
               </Grid>
-
               <Grid container spacing={3} style={{ marginTop: '20px', marginBottom: '20px', display: 'flex', alignItems: 'center' }}>
                 <Grid item xs={8}>
                   <a href="https://www.bombmoney.com/" style={{ display: 'flex', flexDirection: 'row', color: 'white', padding: '10px' }}>Read Investment Strategy </a>
@@ -278,9 +298,7 @@ const Dashboard = () => {
                 </Grid>
 
               </Grid>
-
               <Grid container spacing={3} style={{ marginTop: '20px', display: 'flex', alignItems: 'center', borderRadius: '10px', borderStyle: 'solid', borderColor: '#728CDF', backgroundColor: ' rgba(35, 40, 75, 0.75)' }}>
-
                 <Grid item xs={10} style={{ padding: '20px' }}>
                   <div style={{ fontSize: '22px', color: '#FFFFFF' }}>
                     Bomb Farms
@@ -294,9 +312,6 @@ const Dashboard = () => {
                     Claim All
                   </button>
                 </Grid>
-
-
-
                 <div style={{ margin: '20px', paddingBottom: '7px', width: '100%' }}>
                   <div style={{ fontSize: '22px', color: '#FFFFFF', display: 'flex', paddingBottom: '7px', width: '100%', borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF' }}>
                     <Grid item xs={2}>
@@ -336,7 +351,11 @@ const Dashboard = () => {
                         <Label text={`≈ $${earnedInDollars}`} variant="white" />
                       </Grid>
                       <Grid item xs={2}>
-                        <button style={{ fontSize: '15px', color: '#FFFFFF', padding: '7px', borderRadius: '20px', width: '100px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
+                        {/* <IconButton 
+                  
+                > <AddIcon /></IconButton> */}
+                        <button disabled={bank_BTC.closedForStaking}
+                          onClick={() => (bank_BTC.closedForStaking ? null : onPresentDeposit())} style={{ fontSize: '15px', color: '#FFFFFF', padding: '7px', borderRadius: '20px', width: '100px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
                           Deposit
                         </button>
                       </Grid>
@@ -361,7 +380,6 @@ const Dashboard = () => {
                     </Grid>
                   </div>
                 </div>
-
                 {/* /////////////////////////////////////////// */}
                 <div style={{ width: '100%', borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#00ADE8' }} />
                 <div style={{ margin: '20px', paddingBottom: '7px', width: '100%' }}>
@@ -405,12 +423,13 @@ const Dashboard = () => {
                         <Label text={`≈ $${earnedInDollars}`} variant="white" />
                       </Grid>
                       <Grid item xs={2}>
-                        <button style={{ fontSize: '15px', color: '#FFFFFF', padding: '7px', borderRadius: '20px', width: '100px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
+                        <button disabled={bank_bshare.closedForStaking}
+                          onClick={() => (bank_bshare.closedForStaking ? null : onPresentDeposit2())} style={{ fontSize: '15px', color: '#FFFFFF', padding: '7px', borderRadius: '20px', width: '100px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
                           Deposit
                         </button>
                       </Grid>
                       <Grid item xs={2}>
-                        <button onClick={()=>{onRedeem()}} style={{ fontSize: '15px', color: '#FFFFFF', padding: '7px', borderRadius: '20px', width: '100px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
+                        <button onClick={() => { onRedeem() }} style={{ fontSize: '15px', color: '#FFFFFF', padding: '7px', borderRadius: '20px', width: '100px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
                           Withdraw
                         </button>
                       </Grid>
@@ -431,11 +450,6 @@ const Dashboard = () => {
                 </div>
               </Grid>
               {/* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
-
-
-
-
-
               <Grid container spacing={3} style={{ marginTop: '20px', display: 'flex', alignItems: 'center', borderRadius: '10px', borderStyle: 'solid', borderColor: '#728CDF', backgroundColor: ' rgba(35, 40, 75, 0.75)' }}>
 
                 <Grid item xs={10} style={{ padding: '20px' }}>
@@ -490,9 +504,6 @@ const Dashboard = () => {
                   </div>
                 </div>
               </Grid>
-
-
-
             </Box>
           </Container>
         </Route>
