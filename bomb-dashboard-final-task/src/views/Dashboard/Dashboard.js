@@ -15,8 +15,9 @@ import { ReactComponent as IconDiscord } from '../../assets/img/discord.svg';
 import useBondsPurchasable from '../../hooks/useBondsPurchasable';
 // import { ReactComponent as IconDown } from '../../assets/img/down-arrow-50.png';
 import useRedeem from '../../hooks/useRedeem'
+import useRedeem2 from '../../hooks/useRedeem2'
 import {useTransactionAdder} from '../../state/transactions/hooks';
-
+import useRedeemOnBoardroom from '../../hooks/useRedeemOnBoardroom';
 import useBombFinance from '../../hooks/useBombFinance';
 import { Box, Card, Container, Button, CardContent, Typography, Grid } from '@material-ui/core';
 import ProgressCountdown from './components/ProgressCountdown';
@@ -36,6 +37,7 @@ import useCurrentEpoch from '../../hooks/useCurrentEpoch';
 import { Helmet } from 'react-helmet';
 import useCashPriceInLastTWAP from '../../hooks/useCashPriceInLastTWAP';
 
+import useWithdrawCheck from '../../hooks/boardroom/useWithdrawCheck';
 import { BOND_REDEEM_PRICE, BOND_REDEEM_PRICE_BN } from '../../bomb-finance/constants';
 import useClaimRewardCheck from '../../hooks/boardroom/useClaimRewardCheck';
 
@@ -75,32 +77,32 @@ const Dashboard = () => {
   const { onReward } = useHarvestFromBoardroom();
   const classes = useStyles();
   const stakedBalance = useStakedBalanceOnBoardroom();
-  const bankId = "BombBtcbLPBShareRewardPool";
-  const bankId2 = "BombBshareLPBShareRewardPool";
-  const bank = useBank(bankId);
-  const bank2 = useBank(bankId2);
+  const bankId_BTC = "BombBtcbLPBShareRewardPool";
+  const bankId_bshare = "BombBshareLPBShareRewardPool";
+  const bank_bshare = useBank(bankId_bshare);
+  const bank_BTC = useBank(bankId_BTC);
   const cashPrice = useCashPriceInLastTWAP();
   const bondsPurchasable = useBondsPurchasable();
   const isBondRedeemable = useMemo(() => cashPrice.gt(BOND_REDEEM_PRICE_BN), [cashPrice]);
   const addTransaction = useTransactionAdder();
-  const { onRedeem1 } = useRedeem(bank);
-  const { onRedeem2 } = useRedeem(bank2);
-  let statsOnPool = useStatsForPool(bank);
-  let statsOnPool2 = useStatsForPool(bank2);
+  const canWithdraw = useWithdrawCheck();
+  const { onRedeem } = useRedeem(bank_bshare);
+  const { onRedeem2 } = useRedeem2(bank_BTC);
+  let statsOnPool = useStatsForPool(bank_BTC);
+  let statsOnPool2 = useStatsForPool(bank_bshare);
   const isBondPurchasable = useMemo(() => Number(bondStat?.tokenInFtm) < 1.01, [bondStat]);
 
   const scalingFactor = useMemo(() => (cashStat ? Number(cashStat.priceInDollars).toFixed(4) : null), [cashStat]);
   const earnedInDollars = (Number(tokenPriceInDollars) * Number(getDisplayBalance(earnings))).toFixed(2);
   const handleBuyBonds = useCallback(
 
-    ////// THEEEK KRO ISEEEEEEE
-  //   async (amount: string) => {
-  //     const tx = await bombFinance.buyBonds(amount);
-  //     addTransaction(tx, {
-  //       summary: `Buy ${Number(amount).toFixed(2)} BBOND with ${amount} BOMB`,
-  //     });
-  //   },
-  //   [bombFinance, addTransaction],
+    async (amount) => {
+      const tx = await bombFinance.buyBonds(amount);
+      addTransaction(tx, {
+        summary: `Buy ${Number(amount).toFixed(2)} BBOND with ${amount} BOMB`,
+      });
+    },
+    [bombFinance, addTransaction]
   );
   return (
     <Switch>
@@ -298,7 +300,7 @@ const Dashboard = () => {
                 <div style={{ margin: '20px', paddingBottom: '7px', width: '100%' }}>
                   <div style={{ fontSize: '22px', color: '#FFFFFF', display: 'flex', paddingBottom: '7px', width: '100%', borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF' }}>
                     <Grid item xs={2}>
-                      <TokenSymbol size={22} symbol={bank.depositTokenName} />
+                      <TokenSymbol size={22} symbol={bank_BTC.depositTokenName} />
                       BOMB-BTCB
                     </Grid>
                     <Grid item xs={2}>
@@ -318,7 +320,7 @@ const Dashboard = () => {
                       <Grid item xs={2} style={{ fontSize: '16px' }}>
                         Your Stake
                         <div style={{ display: 'flex' }}>
-                          <TokenSymbol size={22} symbol={bank.depositTokenName} />
+                          <TokenSymbol size={22} symbol={bank_BTC.depositTokenName} />
                           <Label text={`${getDisplayBalance(stakedBalance)}`} variant="white" />
                         </div>
                         {/* <Value value={getDisplayBalance(stakedBalance)} /> */}
@@ -327,7 +329,7 @@ const Dashboard = () => {
                       <Grid item xs={2} style={{ fontSize: '16px' }}>
                         Earned:
                         <div style={{ display: 'flex' }}>
-                          <TokenSymbol size={22} symbol={bank.depositTokenName} />
+                          <TokenSymbol size={22} symbol={bank_BTC.depositTokenName} />
                           <Label text={`${getDisplayBalance(earnings)}`} variant="white" />
                         </div>
                         {/* <Value value={getDisplayBalance(earnings)} /> */}
@@ -342,7 +344,7 @@ const Dashboard = () => {
                         {/* <button style={{ fontSize: '15px', color: '#FFFFFF', padding: '7px', borderRadius: '20px', width: '100px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
                           Withdraw
                         </button> */}
-                        <button onClick={onRedeem1} style={{ fontSize: '15px', color: '#FFFFFF', padding: '7px', borderRadius: '20px', width: '100px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
+                        <button onClick={onRedeem2} style={{ fontSize: '15px', color: '#FFFFFF', padding: '7px', borderRadius: '20px', width: '100px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
                           Withdraw
                         </button>
                       </Grid>
@@ -408,7 +410,7 @@ const Dashboard = () => {
                         </button>
                       </Grid>
                       <Grid item xs={2}>
-                        <button onClick={onRedeem2} style={{ fontSize: '15px', color: '#FFFFFF', padding: '7px', borderRadius: '20px', width: '100px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
+                        <button onClick={()=>{onRedeem()}} style={{ fontSize: '15px', color: '#FFFFFF', padding: '7px', borderRadius: '20px', width: '100px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
                           Withdraw
                         </button>
                       </Grid>
