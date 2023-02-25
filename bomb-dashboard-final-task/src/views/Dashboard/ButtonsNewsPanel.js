@@ -90,10 +90,11 @@ const ButtonsNewsPanel = () => {
                             paddingTop: '7px',
                             paddingBottom: '7px'
                         }
-                    }> <IconDiscord style={{ fill: '#dddfee', height: '20px' }} />Chat on Discord</button>
+                    }> <IconDiscord style={{ fill: '#dddfee', height: '20px' }} /><a href="https://discord.bomb.money"
+                        style={{ color: 'black',textDecoration: 'none' }}>Chat on Discord</a></button>
                     <button style={
                         {
-                            display:'flex',
+                            display: 'flex',
                             alignSelf: 'stretch',
                             fontSize: '18px',
                             width: '100%',
@@ -105,15 +106,15 @@ const ButtonsNewsPanel = () => {
                             borderWidth: '0.5px',
                             marginBottom: '10px'
                         }
-                    }>  
-                    <img src={require('../../assets/img/docsImg.png')} alt={""} height={25} style={{display:'flex', borderRadius: '50%', padding: '5px',marginLeft:'auto' }} />
-                    <a
-                        style={{ textDecoration: 'none', color: 'black' ,display:'flex',paddingTop:'7px',marginRight:'auto'}}
-                        href="https://docs.bomb.money"
-                        // className={'navLink ' + classes.link}
-                        rel="noopener noreferrer"
-                        target="_blank"
-                    >
+                    }>
+                        <img src={require('../../assets/img/docsImg.png')} alt={""} height={25} style={{ display: 'flex', borderRadius: '50%', padding: '5px', marginLeft: 'auto' }} />
+                        <a
+                            style={{ textDecoration: 'none', color: 'black', display: 'flex', paddingTop: '7px', marginRight: 'auto' }}
+                            href="https://docs.bomb.money"
+                            // className={'navLink ' + classes.link}
+                            rel="noopener noreferrer"
+                            target="_blank"
+                        >
                             Read Docs
                         </a></button>
                 </div>
@@ -140,34 +141,34 @@ const ButtonsNewsPanel = () => {
                     </div>
                     <div>
                         <Grid container spacing={4} style={{ fontSize: '12px', color: '#FFFFFF', paddingTop: '7px' }}>
-                        <Grid item xs={2}>
-                            <div style={{ textAlign: 'center', fontSize: '16px' }}>
-                                Daily returns:
-                                <br/>
-                                {bank_BTC.closedForStaking ? '0.00' : statsOnPool?.dailyAPR}%
-                            </div>
-                        </Grid>
+                            <Grid item xs={2}>
+                                <div style={{ textAlign: 'center', fontSize: '16px' }}>
+                                    Daily returns:
+                                    <br />
+                                    {bank_BTC.closedForStaking ? '0.00' : statsOnPool?.dailyAPR}%
+                                </div>
+                            </Grid>
                             <Grid item xs={2} style={{ fontSize: '16px' }}>
-                            Your Stake
-                            <div style={{ display: 'flex',fontSize: '16px' }}>
-                                <TokenSymbol size={22} symbol={bank_BTC.depositTokenName} />
-                                <Label text={`${getDisplayBalance(stakedBalance)}`} variant="white" />
-                            </div>
-                            {/* <Value value={getDisplayBalance(stakedBalance)} /> */}
-                            <Label text={`≈ $${tokenPriceInDollars}`} variant="white" />
-                        </Grid>
-                             <Grid item xs={2} style={{ fontSize: '16px' }}>
-                            Earned:
-                            <div style={{ display: 'flex' ,fontSize: '16px'}}>
-                                <TokenSymbol size={22} symbol={bank_BTC.depositTokenName} />
-                                <Label text={`${getDisplayBalance(earnings)}`} variant="white" />
-                            </div>
-                            {/* <Value value={getDisplayBalance(earnings)} /> */}
-                            <Label text={`≈ $${earnedInDollars}`} variant="white" />
-                        </Grid>
+                                Your Stake
+                                <div style={{ display: 'flex', fontSize: '16px' }}>
+                                    <TokenSymbol size={22} symbol={bank_BTC.depositTokenName} />
+                                    <Label text={`${getDisplayBalance(stakedBalance)}`} variant="white" />
+                                </div>
+                                {/* <Value value={getDisplayBalance(stakedBalance)} /> */}
+                                <Label text={`≈ $${tokenPriceInDollars}`} variant="white" />
+                            </Grid>
+                            <Grid item xs={2} style={{ fontSize: '16px' }}>
+                                Earned:
+                                <div style={{ display: 'flex', fontSize: '16px' }}>
+                                    <TokenSymbol size={22} symbol={bank_BTC.depositTokenName} />
+                                    <Label text={`${getDisplayBalance(earnings)}`} variant="white" />
+                                </div>
+                                {/* <Value value={getDisplayBalance(earnings)} /> */}
+                                <Label text={`≈ $${earnedInDollars}`} variant="white" />
+                            </Grid>
                             <Grid item xs={4}>
-                                <div style={{ padding: '7px',display:'flex', justifyContent: 'center' }}>
-                                    <Grid item xs={2} style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-start',marginLeft:'auto' }}>
+                                <div style={{ padding: '7px', display: 'flex', justifyContent: 'center' }}>
+                                    <Grid item xs={2} style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-start', marginLeft: 'auto' }}>
                                         <button disabled={bank_BTC.closedForStaking}
                                             onClick={() => (bank_BTC.closedForStaking ? null : onPresentDeposit())} style={{ display: 'flex', flexDirection: 'row', fontSize: '15px', color: '#FFFFFF', paddingLeft: '7px', borderRadius: '30px', width: '120px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
 
@@ -175,7 +176,7 @@ const ButtonsNewsPanel = () => {
                                             <img src={require('../../assets/img/upArrow.png')} alt={""} height={25} style={{ borderRadius: '50%', padding: '5px' }} />
                                         </button>
                                     </Grid>
-                                    <Grid item xs={2} style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-end',marginLeft:'auto' }}>
+                                    <Grid item xs={2} style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-end', marginLeft: 'auto' }}>
                                         <button onClick={onPresentWithdraw} style={{ fontSize: '15px', display: 'flex', flexDirection: 'row', color: '#FFFFFF', paddingLeft: '7px', borderRadius: '30px', width: '130px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
                                             <Grid style={{ padding: '7px' }}> Withdraw</Grid>
                                             <img src={require('../../assets/img/downArrow.png')} alt={""} height={25} style={{ borderRadius: '50%', padding: '5px' }} />
@@ -183,53 +184,53 @@ const ButtonsNewsPanel = () => {
                                     </Grid>
 
 
-                    </div>
-                    {/* <Grid item xs={2}> */}
-                    <Button
-                        style={{ fontSize: '15px', color: '#FFFFFF', padding: '5px', borderRadius: '20px',marginLeft:'auto', width: '80%', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}
-                        onClick={onReward}
-                        className={earnings.eq(0) || !canClaimReward ? 'shinyButtonDisabledRewards' : 'shinyButtonEnabled'}
-                        disabled={earnings.eq(0) || !canClaimReward}
-                    >
-                        {/* shinyButtonEnabled */}
-                        Claim Reward
-                    </Button>
-            </Grid>
-        </Grid>
+                                </div>
+                                {/* <Grid item xs={2}> */}
+                                <Button
+                                    style={{ fontSize: '15px', color: '#FFFFFF', padding: '5px', borderRadius: '20px', marginLeft: 'auto', width: '80%', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}
+                                    onClick={onReward}
+                                    className={earnings.eq(0) || !canClaimReward ? 'shinyButtonDisabledRewards' : 'shinyButtonEnabled'}
+                                    disabled={earnings.eq(0) || !canClaimReward}
+                                >
+                                    {/* shinyButtonEnabled */}
+                                    Claim Reward
+                                </Button>
+                            </Grid>
+                        </Grid>
                     </div >
                 </div >
             </Grid >
-    <Grid item xs={4}>
-        <Card style={{ borderRadius: '10px', borderStyle: 'solid', borderColor: '#728CDF', backgroundColor: ' rgba(35, 40, 75, 0.75)' }}>
-            <CardContent style={{ textAlign: 'left' }}>
-                <Typography >Latest News</Typography>
-            </CardContent>
-            <CardContent style={{ textAlign: 'left' }}>
-                <Typography ></Typography>
-            </CardContent>
-            <CardContent style={{ textAlign: 'left' }}>
-                <Typography ></Typography>
-            </CardContent>
-            <CardContent style={{ textAlign: 'left' }}>
-                <Typography ></Typography>
-            </CardContent>
-            <CardContent style={{ textAlign: 'left' }}>
-                <Typography ></Typography>
-            </CardContent>
-            <CardContent style={{ textAlign: 'left' }}>
-                <Typography ></Typography>
-            </CardContent>
-            <CardContent style={{ textAlign: 'left' }}>
-                <Typography ></Typography>
-            </CardContent>
-            <CardContent style={{ textAlign: 'left' }}>
-                <Typography ></Typography>
-            </CardContent>
-            <CardContent style={{ textAlign: 'left' }}>
-                <Typography ></Typography>
-            </CardContent>
-        </Card>
-    </Grid>
+            <Grid item xs={4}>
+                <Card style={{ borderRadius: '10px', borderStyle: 'solid', borderColor: '#728CDF', backgroundColor: ' rgba(35, 40, 75, 0.75)' }}>
+                    <CardContent style={{ textAlign: 'left' }}>
+                        <Typography >Latest News</Typography>
+                    </CardContent>
+                    <CardContent style={{ textAlign: 'left' }}>
+                        <Typography ></Typography>
+                    </CardContent>
+                    <CardContent style={{ textAlign: 'left' }}>
+                        <Typography ></Typography>
+                    </CardContent>
+                    <CardContent style={{ textAlign: 'left' }}>
+                        <Typography ></Typography>
+                    </CardContent>
+                    <CardContent style={{ textAlign: 'left' }}>
+                        <Typography ></Typography>
+                    </CardContent>
+                    <CardContent style={{ textAlign: 'left' }}>
+                        <Typography ></Typography>
+                    </CardContent>
+                    <CardContent style={{ textAlign: 'left' }}>
+                        <Typography ></Typography>
+                    </CardContent>
+                    <CardContent style={{ textAlign: 'left' }}>
+                        <Typography ></Typography>
+                    </CardContent>
+                    <CardContent style={{ textAlign: 'left' }}>
+                        <Typography ></Typography>
+                    </CardContent>
+                </Card>
+            </Grid>
 
         </Grid >
     );
