@@ -19,9 +19,6 @@ import WithdrawModal from '../Bank/components/WithdrawModal';
 import useBombStats from '../../hooks/useBombStats';
 import { getDisplayBalance } from '../../utils/formatBalance';
 
-
-
-
 const ButtonsNewsPanel = () => {
 
     const canClaimReward = useClaimRewardCheck();
@@ -29,6 +26,9 @@ const ButtonsNewsPanel = () => {
     const { onReward } = useHarvestFromBoardroom();
     const bankId_BTC = "BombBtcbLPBShareRewardPool";
     const bombStats = useBombStats();
+    const bankId_bshare = "BshareBnbLPBShareRewardPool";
+    const bank_bshare = useBank(bankId_bshare);
+    let statsOnPool2 = useStatsForPool(bank_bshare);
     const bank_BTC = useBank(bankId_BTC);
     let statsOnPool = useStatsForPool(bank_BTC);
     const stakedBalance = useStakedBalanceOnBoardroom();
@@ -140,9 +140,13 @@ const ButtonsNewsPanel = () => {
                     </div>
                     <div>
                         <Grid container spacing={4} style={{ fontSize: '12px', color: '#FFFFFF', paddingTop: '7px' }}>
-                            <Grid item xs={2}>
-                                Daily returns: 2%
-                            </Grid>
+                        <Grid item xs={2}>
+                            <div style={{ textAlign: 'center', fontSize: '16px' }}>
+                                Daily returns:
+                                <br/>
+                                {bank_BTC.closedForStaking ? '0.00' : statsOnPool?.dailyAPR}%
+                            </div>
+                        </Grid>
                             <Grid item xs={2} style={{ fontSize: '16px' }}>
                             Your Stake
                             <div style={{ display: 'flex',fontSize: '16px' }}>

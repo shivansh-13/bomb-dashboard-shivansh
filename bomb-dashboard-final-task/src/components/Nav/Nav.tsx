@@ -210,7 +210,7 @@ const Nav = () => {
                 Docs
               </a>
               <Link to="/dashboard" className={'navLink ' + classes.link}>
-                        D
+                        Dashboard
               </Link>
             </Box>
 

@@ -32,7 +32,7 @@ const BombFarms = () => {
     const { onReward } = useHarvestFromBoardroom();
     const stakedBalance = useStakedBalanceOnBoardroom();
     const bankId_BTC = "BombBtcbLPBShareRewardPool";
-    const bankId_bshare = "BombBshareLPBShareRewardPool";
+    const bankId_bshare = "BshareBnbLPBShareRewardPool";
     const bank_bshare = useBank(bankId_bshare);
     const bank_BTC = useBank(bankId_BTC);
     let statsOnPool = useStatsForPool(bank_BTC);
@@ -132,11 +132,15 @@ const BombFarms = () => {
                 <div>
                     <Grid container spacing={3} style={{ paddingTop: '7px', fontSize: '16px', color: '#FFFFFF' }}>
                         <Grid item xs={2}>
-                            Daily returns: 2%
+                            <div style={{ textAlign: 'center', fontSize: '20px' }}>
+                                Daily returns:
+                                <br/>
+                                {bank_BTC.closedForStaking ? '0.00' : statsOnPool?.dailyAPR}%
+                            </div>
                         </Grid>
                         <Grid item xs={2} style={{ fontSize: '20px' }}>
                             Your Stake
-                            <div style={{ display: 'flex',fontSize: '16px' }}>
+                            <div style={{ display: 'flex', fontSize: '16px' }}>
                                 <TokenSymbol size={22} symbol={bank_BTC.depositTokenName} />
                                 <Label text={`${getDisplayBalance(stakedBalance)}`} variant="white" />
                             </div>
@@ -145,14 +149,14 @@ const BombFarms = () => {
                         </Grid>
                         <Grid item xs={2} style={{ fontSize: '20px' }}>
                             Earned:
-                            <div style={{ display: 'flex' ,fontSize: '16px'}}>
+                            <div style={{ display: 'flex', fontSize: '16px' }}>
                                 <TokenSymbol size={22} symbol={bank_BTC.depositTokenName} />
                                 <Label text={`${getDisplayBalance(earnings)}`} variant="white" />
                             </div>
                             {/* <Value value={getDisplayBalance(earnings)} /> */}
                             <Label text={`≈ $${earnedInDollars}`} variant="white" />
                         </Grid>
-                        <Grid item xs={2} style={{display:'flex',justifyContent:'flex-end',alignItems:'flex-end'}}>
+                        <Grid item xs={2} style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
                             <button disabled={bank_BTC.closedForStaking}
                                 onClick={() => (bank_BTC.closedForStaking ? null : onPresentDeposit())} style={{ display: 'flex', flexDirection: 'row', fontSize: '15px', color: '#FFFFFF', paddingLeft: '7px', borderRadius: '30px', width: '120px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
 
@@ -160,13 +164,13 @@ const BombFarms = () => {
                                 <img src={require('../../assets/img/upArrow.png')} alt={""} height={25} style={{ borderRadius: '50%', padding: '5px' }} />
                             </button>
                         </Grid>
-                        <Grid item xs={2} style={{display:'flex',justifyContent:'flex-end',alignItems:'flex-end'}}>
+                        <Grid item xs={2} style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
                             <button onClick={onPresentWithdraw} style={{ fontSize: '15px', display: 'flex', flexDirection: 'row', color: '#FFFFFF', paddingLeft: '7px', borderRadius: '30px', width: '130px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
                                 <Grid style={{ padding: '7px' }}> Withdraw</Grid>
                                 <img src={require('../../assets/img/downArrow.png')} alt={""} height={25} style={{ borderRadius: '50%', padding: '5px' }} />
                             </button>
                         </Grid>
-                        <Grid item xs={2} style={{display:'flex',justifyContent:'flex-end',alignItems:'flex-end'}}>
+                        <Grid item xs={2} style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
                             <Button
                                 style={{ fontSize: '15px', color: '#FFFFFF', padding: '5px', borderRadius: '20px', width: '150px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}
                                 onClick={onReward}
@@ -185,7 +189,7 @@ const BombFarms = () => {
             <div style={{ margin: '20px', paddingBottom: '7px', width: '100%' }}>
                 <div style={{ fontSize: '22px', color: '#FFFFFF', display: 'flex', paddingBottom: '7px', width: '100%', borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF' }}>
                     <Grid item xs={2}>
-                        <TokenSymbolSmall symbol="BSHARE" />
+                        <TokenSymbol size={22} symbol={bank_bshare.depositTokenName} />
                         BSHARE-BNB
                     </Grid>
                     <Grid item xs={2}>
@@ -197,10 +201,14 @@ const BombFarms = () => {
                         TVL: ${statsOnPool2?.TVL}
                     </Grid>
                 </div>
-                <div style={{ paddingTop: '7px' }}>
-                    <Grid container spacing={3} style={{ fontSize: '20px', color: '#FFFFFF' }}>
+                <div >
+                    <Grid container spacing={3} style={{ paddingTop: '7px', fontSize: '20px', color: '#FFFFFF' }}>
                         <Grid item xs={2}>
-                            Daily returns: 2%
+                            <div style={{ textAlign: 'center', fontSize: '20px' }}>
+                                Daily returns:
+                                <br/>
+                                {bank_bshare.closedForStaking ? '0.00' : statsOnPool2?.dailyAPR}%
+                            </div>
                         </Grid>
                         <Grid item xs={2} style={{ fontSize: '20px' }}>
                             Your Stake
@@ -215,22 +223,21 @@ const BombFarms = () => {
                         </Grid>
                         <Grid item xs={2} style={{ fontSize: '20px' }}>
                             Earned:
-                            <div style={{ display: 'flex',fontSize: '16px' }}>
+                            <div style={{ display: 'flex', fontSize: '16px' }}>
                                 <TokenSymbolSmall symbol="BSHARE" />
                                 <Label text={`${getDisplayBalance(earnings)}`} variant="white" />
                             </div>
                             {/* <Value value={getDisplayBalance(earnings)} /> */}
                             <Label text={`≈ $${earnedInDollars}`} variant="white" />
                         </Grid>
-                        <Grid item xs={2} style={{display:'flex',justifyContent:'flex-end',alignItems:'flex-end'}}>
+                        <Grid item xs={2} style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
                             <button disabled={bank_bshare.closedForStaking}
                                 onClick={() => (bank_bshare.closedForStaking ? null : onPresentDeposit2())} style={{ display: 'flex', flexDirection: 'row', fontSize: '15px', color: '#FFFFFF', paddingLeft: '7px', borderRadius: '30px', width: '120px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
-
                                 <Grid style={{ padding: '7px' }}> Deposit</Grid>
                                 <img src={require('../../assets/img/upArrow.png')} height={25} alt={""} style={{ borderRadius: '50%', padding: '5px' }} />
                             </button>
                         </Grid>
-                        <Grid item xs={2} style={{display:'flex',justifyContent:'flex-end',alignItems:'flex-end'}}>
+                        <Grid item xs={2} style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
                             <button onClick={onPresentWithdraw2} style={{ fontSize: '15px', display: 'flex', flexDirection: 'row', color: '#FFFFFF', paddingLeft: '7px', borderRadius: '30px', width: '130px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
                                 <Grid style={{ padding: '7px' }}> Withdraw</Grid>
                                 <img src={require('../../assets/img/downArrow.png')} height={25} alt={""} style={{ borderRadius: '50%', padding: '5px' }} />
@@ -238,7 +245,7 @@ const BombFarms = () => {
                                 {/* <IconDown/> */}
                             </button>
                         </Grid>
-                        <Grid item xs={2} style={{display:'flex',justifyContent:'flex-end',alignItems:'flex-end'}}>
+                        <Grid item xs={2} style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
                             <Button
                                 style={{ marginLeft: 'auto', fontSize: '15px', color: '#FFFFFF', padding: '5px', borderRadius: '20px', width: '150px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}
                                 onClick={onReward}
