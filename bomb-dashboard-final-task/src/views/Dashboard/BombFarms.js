@@ -104,9 +104,15 @@ const BombFarms = () => {
                 </div>
             </Grid>
             <Grid item xs={2}>
-                <button style={{ fontSize: '15px', color: '#FFFFFF', padding: '7px', borderRadius: '20px', width: '150px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
+                <Button
+                    style={{ marginLeft: 'auto', fontSize: '15px', color: '#FFFFFF', padding: '5px', borderRadius: '20px', width: '150px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}
+                    onClick={onReward}
+                    className={earnings.eq(0) || !canClaimReward ? 'shinyButtonDisabledRewards' : 'shinyButtonEnabled'}
+                    disabled={earnings.eq(0) || !canClaimReward}
+                >
                     Claim All
-                </button>
+                    <TokenSymbolSmall symbol="BSHARE" />
+                </Button>
             </Grid>
             <div style={{ margin: '20px', paddingBottom: '7px', width: '100%' }}>
                 <div style={{ fontSize: '22px', color: '#FFFFFF', display: 'flex', paddingBottom: '7px', width: '100%', borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF' }}>
@@ -124,50 +130,51 @@ const BombFarms = () => {
                     </Grid>
                 </div>
                 <div>
-                    <Grid container spacing={3} style={{ paddingTop: '7px', fontSize: '12px', color: '#FFFFFF' }}>
+                    <Grid container spacing={3} style={{ paddingTop: '7px', fontSize: '16px', color: '#FFFFFF' }}>
                         <Grid item xs={2}>
                             Daily returns: 2%
                         </Grid>
-                        <Grid item xs={2} style={{ fontSize: '16px' }}>
+                        <Grid item xs={2} style={{ fontSize: '20px' }}>
                             Your Stake
-                            <div style={{ display: 'flex' }}>
+                            <div style={{ display: 'flex',fontSize: '16px' }}>
                                 <TokenSymbol size={22} symbol={bank_BTC.depositTokenName} />
                                 <Label text={`${getDisplayBalance(stakedBalance)}`} variant="white" />
                             </div>
                             {/* <Value value={getDisplayBalance(stakedBalance)} /> */}
                             <Label text={`≈ $${tokenPriceInDollars}`} variant="white" />
                         </Grid>
-                        <Grid item xs={2} style={{ fontSize: '16px' }}>
+                        <Grid item xs={2} style={{ fontSize: '20px' }}>
                             Earned:
-                            <div style={{ display: 'flex' }}>
+                            <div style={{ display: 'flex' ,fontSize: '16px'}}>
                                 <TokenSymbol size={22} symbol={bank_BTC.depositTokenName} />
                                 <Label text={`${getDisplayBalance(earnings)}`} variant="white" />
                             </div>
                             {/* <Value value={getDisplayBalance(earnings)} /> */}
                             <Label text={`≈ $${earnedInDollars}`} variant="white" />
                         </Grid>
-                        <Grid item xs={2}>
+                        <Grid item xs={2} style={{display:'flex',justifyContent:'flex-end',alignItems:'flex-end'}}>
                             <button disabled={bank_BTC.closedForStaking}
-                                onClick={() => (bank_BTC.closedForStaking ? null : onPresentDeposit())} style={{ display: 'flex', flexDirection: 'row', fontSize: '15px', color: '#FFFFFF', padding: '7px', borderRadius: '30px', width: '120px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
+                                onClick={() => (bank_BTC.closedForStaking ? null : onPresentDeposit())} style={{ display: 'flex', flexDirection: 'row', fontSize: '15px', color: '#FFFFFF', paddingLeft: '7px', borderRadius: '30px', width: '120px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
 
                                 <Grid style={{ padding: '7px' }}> Deposit</Grid>
-                                <Grid> <img src={require('../../assets/img/upArrow.png')} alt={""}  height={30} style={{ borderRadius: '50%', marginLeft: '10px' }} /></Grid>
+                                <img src={require('../../assets/img/upArrow.png')} alt={""} height={25} style={{ borderRadius: '50%', padding: '5px' }} />
                             </button>
                         </Grid>
-                        <Grid item xs={2}>
-                            <button onClick={onPresentWithdraw} style={{ fontSize: '15px', display: 'flex', flexDirection: 'row', color: '#FFFFFF', padding: '7px', borderRadius: '30px', width: '135px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
+                        <Grid item xs={2} style={{display:'flex',justifyContent:'flex-end',alignItems:'flex-end'}}>
+                            <button onClick={onPresentWithdraw} style={{ fontSize: '15px', display: 'flex', flexDirection: 'row', color: '#FFFFFF', paddingLeft: '7px', borderRadius: '30px', width: '130px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
                                 <Grid style={{ padding: '7px' }}> Withdraw</Grid>
-                                <Grid> <img src={require('../../assets/img/downArrow.png')} alt={""} height={30} style={{ borderRadius: '50%', marginLeft: '10px' }} /></Grid>
+                                <img src={require('../../assets/img/downArrow.png')} alt={""} height={25} style={{ borderRadius: '50%', padding: '5px' }} />
                             </button>
                         </Grid>
-                        <Grid item xs={2}>
+                        <Grid item xs={2} style={{display:'flex',justifyContent:'flex-end',alignItems:'flex-end'}}>
                             <Button
-                                style={{ fontSize: '12px', color: '#FFFFFF', padding: '5px', borderRadius: '20px', width: '120px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}
+                                style={{ fontSize: '15px', color: '#FFFFFF', padding: '5px', borderRadius: '20px', width: '150px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}
                                 onClick={onReward}
                                 className={earnings.eq(0) || !canClaimReward ? 'shinyButtonDisabledRewards' : 'shinyButtonEnabled'}
                                 disabled={earnings.eq(0) || !canClaimReward}
                             >
                                 Claim Reward
+                                <TokenSymbolSmall symbol="BSHARE" />
                             </Button>
                         </Grid>
                     </Grid>
@@ -191,11 +198,11 @@ const BombFarms = () => {
                     </Grid>
                 </div>
                 <div style={{ paddingTop: '7px' }}>
-                    <Grid container spacing={3} style={{ fontSize: '12px', color: '#FFFFFF' }}>
+                    <Grid container spacing={3} style={{ fontSize: '20px', color: '#FFFFFF' }}>
                         <Grid item xs={2}>
                             Daily returns: 2%
                         </Grid>
-                        <Grid item xs={2} style={{ fontSize: '16px' }}>
+                        <Grid item xs={2} style={{ fontSize: '20px' }}>
                             Your Stake
                             <div style={{ fontSize: '16px' }}>
                                 <div style={{ display: 'flex' }}>
@@ -206,39 +213,40 @@ const BombFarms = () => {
                             </div>
                             <Label text={`≈ $${tokenPriceInDollars}`} variant="white" />
                         </Grid>
-                        <Grid item xs={2} style={{ fontSize: '16px' }}>
+                        <Grid item xs={2} style={{ fontSize: '20px' }}>
                             Earned:
-                            <div style={{ display: 'flex' }}>
+                            <div style={{ display: 'flex',fontSize: '16px' }}>
                                 <TokenSymbolSmall symbol="BSHARE" />
                                 <Label text={`${getDisplayBalance(earnings)}`} variant="white" />
                             </div>
                             {/* <Value value={getDisplayBalance(earnings)} /> */}
                             <Label text={`≈ $${earnedInDollars}`} variant="white" />
                         </Grid>
-                        <Grid item xs={2}>
+                        <Grid item xs={2} style={{display:'flex',justifyContent:'flex-end',alignItems:'flex-end'}}>
                             <button disabled={bank_bshare.closedForStaking}
-                                onClick={() => (bank_bshare.closedForStaking ? null : onPresentDeposit2())} style={{ display: 'flex', flexDirection: 'row', fontSize: '15px', color: '#FFFFFF', padding: '7px', borderRadius: '30px', width: '120px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
+                                onClick={() => (bank_bshare.closedForStaking ? null : onPresentDeposit2())} style={{ display: 'flex', flexDirection: 'row', fontSize: '15px', color: '#FFFFFF', paddingLeft: '7px', borderRadius: '30px', width: '120px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
 
                                 <Grid style={{ padding: '7px' }}> Deposit</Grid>
-                                <Grid> <img src={require('../../assets/img/upArrow.png')} height={30} alt={""} style={{ borderRadius: '50%', marginLeft: '10px' }} /></Grid>
+                                <img src={require('../../assets/img/upArrow.png')} height={25} alt={""} style={{ borderRadius: '50%', padding: '5px' }} />
                             </button>
                         </Grid>
-                        <Grid item xs={2}>
-                            <button onClick={onPresentWithdraw2} style={{ fontSize: '15px', display: 'flex', flexDirection: 'row', color: '#FFFFFF', padding: '7px', borderRadius: '30px', width: '135px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
+                        <Grid item xs={2} style={{display:'flex',justifyContent:'flex-end',alignItems:'flex-end'}}>
+                            <button onClick={onPresentWithdraw2} style={{ fontSize: '15px', display: 'flex', flexDirection: 'row', color: '#FFFFFF', paddingLeft: '7px', borderRadius: '30px', width: '130px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
                                 <Grid style={{ padding: '7px' }}> Withdraw</Grid>
-                                <Grid> <img src={require('../../assets/img/downArrow.png')} height={30} alt={""} style={{ borderRadius: '50%', marginLeft: '10px' }} /></Grid>
+                                <img src={require('../../assets/img/downArrow.png')} height={25} alt={""} style={{ borderRadius: '50%', padding: '5px' }} />
 
                                 {/* <IconDown/> */}
                             </button>
                         </Grid>
-                        <Grid item xs={2}>
+                        <Grid item xs={2} style={{display:'flex',justifyContent:'flex-end',alignItems:'flex-end'}}>
                             <Button
-                                style={{ fontSize: '12px', color: '#FFFFFF', padding: '5px', borderRadius: '20px', width: '120px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}
+                                style={{ marginLeft: 'auto', fontSize: '15px', color: '#FFFFFF', padding: '5px', borderRadius: '20px', width: '150px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}
                                 onClick={onReward}
                                 className={earnings.eq(0) || !canClaimReward ? 'shinyButtonDisabledRewards' : 'shinyButtonEnabled'}
                                 disabled={earnings.eq(0) || !canClaimReward}
                             >
                                 Claim Reward
+                                <TokenSymbolSmall symbol="BSHARE" />
                             </Button>
                         </Grid>
                     </Grid>

@@ -69,14 +69,14 @@ const Dashboard = () => {
                   </Grid>
                   <Grid item xs={4}>
 
-                    <div className={classes.gridItem} style={{ color: 'white' }} >
+                    <div className={classes.gridItem}  style={{marginLeft:'auto',marginRight:'auto', width:'75%', borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF', paddingBottom: '7px', fontsize: '12px', color: 'white' }} >
                       <CardContent align="center" >
                         <Typography style={{}}>Current Epoch</Typography>
                         <Typography style={{ fontSize: '30px' }}>{Number(currentEpoch)}</Typography>
                       </CardContent>
                     </div>
 
-                    <div className={classes.gridItem} style={{ color: 'white' }} >
+                    <div className={classes.gridItem} style={{marginLeft:'auto',marginRight:'auto', width:'50%', borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF', paddingBottom: '7px', fontsize: '12px', color: 'white' }} >
                       <CardContent style={{ textAlign: 'center' }}>
                         <div style={{ fontSize: '30px' }}>
                           <ProgressCountdown base={moment().toDate()} hideBar={true} deadline={to} description="Next Epoch in" />
