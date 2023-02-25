@@ -51,27 +51,23 @@ const BondsPanel = () => {
         </div>
       </Grid>
       <div style={{ padding: '20px', width: '100%' }}>
-        <Grid container spacing={3} style={{ fontSize: '12px', color: '#FFFFFF', width: '100%' }}>
-          <Grid item xs={2}>
+        <Grid container spacing={3} style={{ fontSize: '20px', color: '#FFFFFF', width: '100%' }} >
+          <Grid item xs={3} >
             <div> Current Price: (Bomb)^2</div>
-
-            {/* <div style={{ fontSize: '16px', color: '#FFFFFF', paddingTop: '7px' }}> */}
-            {/* tokenName="10,000 BBOND" */}
-            {/* description="Current Price: (BOMB)^2" */}
             <div>
               10,000 BBond={Number(bondStat?.tokenInFtm).toFixed(4) || '-'} BTCB
             </div>
 
             {/* </div> */}
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={3}>
             Available to redeem:
             <div style={{ fontSize: '36px', color: '#FFFFFF', paddingTop: '7px' }}>
               <TokenSymbolSmall symbol="BBOND" />{getDisplayBalance(bondBalance)}
             </div>
           </Grid>
           {/* <Grid item xs={8} style={{ display: 'flex' }}> */}
-          <Grid item xs={8}>
+          <Grid item xs={6}>
             <ExchangeCardDashboard
               action="Purchase"
               fromToken={bombFinance.BOMB}
@@ -85,7 +81,7 @@ const BondsPanel = () => {
               }
               onExchange={handleBuyBonds}
               disabled={!bondStat || isBondRedeemable}
-            /><br />
+            /><div   style={{ borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF', paddingBottom: '7px', fontsize: '12px' }}/>
             <ExchangeCardDashboard
               action="Redeem"
               fromToken={bombFinance.BBOND}
@@ -98,7 +94,6 @@ const BondsPanel = () => {
               disabledDescription={!isBondRedeemable ? `Enabled when 10,000 BOMB > ${BOND_REDEEM_PRICE}BTC` : null}
             />
           </Grid>
-          {/* </Grid> */}
         </Grid>
       </div>
     </Grid>

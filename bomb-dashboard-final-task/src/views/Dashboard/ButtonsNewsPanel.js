@@ -26,9 +26,6 @@ const ButtonsNewsPanel = () => {
     const { onReward } = useHarvestFromBoardroom();
     const bankId_BTC = "BombBtcbLPBShareRewardPool";
     const bombStats = useBombStats();
-    const bankId_bshare = "BshareBnbLPBShareRewardPool";
-    const bank_bshare = useBank(bankId_bshare);
-    let statsOnPool2 = useStatsForPool(bank_bshare);
     const bank_BTC = useBank(bankId_BTC);
     let statsOnPool = useStatsForPool(bank_BTC);
     const stakedBalance = useStakedBalanceOnBoardroom();
@@ -96,6 +93,7 @@ const ButtonsNewsPanel = () => {
                     }> <IconDiscord style={{ fill: '#dddfee', height: '20px' }} />Chat on Discord</button>
                     <button style={
                         {
+                            display:'flex',
                             alignSelf: 'stretch',
                             fontSize: '18px',
                             width: '100%',
@@ -107,8 +105,10 @@ const ButtonsNewsPanel = () => {
                             borderWidth: '0.5px',
                             marginBottom: '10px'
                         }
-                    }>  <a
-                        style={{ textDecoration: 'none', color: 'black' }}
+                    }>  
+                    <img src={require('../../assets/img/docsImg.png')} alt={""} height={25} style={{display:'flex', borderRadius: '50%', padding: '5px',marginLeft:'auto' }} />
+                    <a
+                        style={{ textDecoration: 'none', color: 'black' ,display:'flex',paddingTop:'7px',marginRight:'auto'}}
                         href="https://docs.bomb.money"
                         // className={'navLink ' + classes.link}
                         rel="noopener noreferrer"

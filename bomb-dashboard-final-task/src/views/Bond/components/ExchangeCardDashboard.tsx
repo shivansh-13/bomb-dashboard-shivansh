@@ -80,7 +80,7 @@ const ExchangeCard: React.FC<ExchangeCardProps> = ({
                       </Button>
                     ) : (
                       <Button
-                        style={{width:'200px',borderRadius:'20px'}}
+                        style={{width:'200px',borderRadius:'20px',marginBottom:'auto'}}
                         className={disabled ? 'shinyButtonDisabledECD' : 'shinyButtonECD'}
                         onClick={onPresent}
                         disabled={disabled}
@@ -104,11 +104,11 @@ const ExchangeCard: React.FC<ExchangeCardProps> = ({
 const StyledCardTitle = styled.div`
   align-items: flex-start;
   flex-direction: row;
-  justify-content: flex-end;  
+  // justify-content: flex-end;  
   display: flex;
-  font-size: 14px;
+  font-size: 20px;
   // font-weight: 700;
-  height: 64px;
+  // height: 64px;
   // color: #f9d749;
   margin-top: ${(props) => -props.theme.spacing[3]}px;
 `;
@@ -120,13 +120,15 @@ const StyledCardActions = styled.div`
   width: auto;
   margin-left:auto;
 `;
-const StyledDesc = styled.div``;
+const StyledDesc = styled.div`
+font-size:16px 
+`;
 const StyledCardContentInner = styled.div`
   align-items: center;
   display: flex;
   flex: 1;
   flex-direction: column;
-  justify-content: space-between;
+  // justify-content: space-between;
 `;
 
 export default ExchangeCard;
