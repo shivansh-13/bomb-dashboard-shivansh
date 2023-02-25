@@ -44,7 +44,7 @@ const BombFarms = () => {
     const { onWithdraw } = useWithdraw(bank_BTC)
     const { onWithdraw2 } = useWithdraw2(bank_bshare)
     const tokenBalance = useTokenBalance(bank_BTC.depositToken);
-    ;
+
     const [onPresentDeposit, onDismissDeposit] = useModal(
         <DepositModal
             max={tokenBalance}
