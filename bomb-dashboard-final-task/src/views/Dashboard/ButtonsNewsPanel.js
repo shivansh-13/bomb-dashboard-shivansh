@@ -70,11 +70,14 @@ const ButtonsNewsPanel = () => {
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                     <button style={{
-                            backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                            backgroundColor: 'rgba(180, 235, 255, 0.3)',
                             width: '100%', margin: '.2rem 0',
                             fontSize: '1.3rem',
                             paddingTop: '7px',
-                            paddingBottom: '7px'
+                            paddingBottom: '7px',
+                            borderStyle:'solid',
+                            borderWidth:'0.5px',
+                            borderColor:'rgba(255, 0, 0, 0.3)'
                         }}>
                         <a href="https://www.bomb.money/" style={{
                             textDecoration:'none',color:'white'
