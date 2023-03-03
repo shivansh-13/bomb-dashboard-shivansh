@@ -65,14 +65,21 @@ const ButtonsNewsPanel = () => {
     return (
         <Grid container spacing={3} style={{ marginTop: '20px', marginBottom: '20px', display: 'flex', alignItems: 'center' }}>
             <Grid item xs={8}>
-                <a href="https://www.bombmoney.com/" style={{ display: 'flex', flexDirection: 'row', color: 'white', padding: '10px' }}>Read Investment Strategy </a>
+                <div style={{ textAlign: 'right', padding: '10px' }}>
+                    <span><a href="https://docs.bomb.money/welcome-start-here/readme" style={{ color: 'rgba(158, 230, 255, 1)' }}>Read Investment Strategy</a></span>
+                </div>
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                     <button style={{
-                        alignSelf: 'stretch', fontSize: '24px', backgroundColor: 'rgba(180, 225, 245, 0.50)',
-                        border: 'solid', color: 'white',
-                        borderColor: 'rgba(228, 26, 26, 1)', borderWidth: '0.5px', paddingTop: '7px',
-                        paddingBottom: '7px'
-                    }}>Invest Now</button>
+                            backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                            width: '100%', margin: '.2rem 0',
+                            fontSize: '1.3rem',
+                            paddingTop: '7px',
+                            paddingBottom: '7px'
+                        }}>
+                        <a href="https://www.bomb.money/" style={{
+                            textDecoration:'none',color:'white'
+                        }}>Invest Now </a>
+                    </button>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'row' }}>
                     <button style={
@@ -91,7 +98,7 @@ const ButtonsNewsPanel = () => {
                             paddingBottom: '7px'
                         }
                     }> <IconDiscord style={{ fill: '#dddfee', height: '20px' }} /><a href="https://discord.bomb.money"
-                        style={{ color: 'black',textDecoration: 'none' }}>Chat on Discord</a></button>
+                        style={{ color: 'black', textDecoration: 'none' }}>Chat on Discord</a></button>
                     <button style={
                         {
                             display: 'flex',
@@ -166,9 +173,9 @@ const ButtonsNewsPanel = () => {
                                 {/* <Value value={getDisplayBalance(earnings)} /> */}
                                 <Label text={`≈ $${earnedInDollars}`} variant="white" />
                             </Grid>
-                            <Grid item xs={4}>
-                                <div style={{ padding: '7px', display: 'flex', justifyContent: 'center' }}>
-                                    <Grid item xs={2} style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-start', marginLeft: 'auto' }}>
+                            <Grid item xs={6}>
+                                <div style={{ padding: '7px', display: 'flex', justifyContent: 'center',alignItems:'space-between',marginLeft:'auto' }}>
+                                    <Grid item xs={2} style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-start',paddingRight:'16%' }}>
                                         <button disabled={bank_BTC.closedForStaking}
                                             onClick={() => (bank_BTC.closedForStaking ? null : onPresentDeposit())} style={{ display: 'flex', flexDirection: 'row', fontSize: '15px', color: '#FFFFFF', paddingLeft: '7px', borderRadius: '30px', width: '120px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
 
@@ -176,7 +183,7 @@ const ButtonsNewsPanel = () => {
                                             <img src={require('../../assets/img/upArrow.png')} alt={""} height={25} style={{ borderRadius: '50%', padding: '5px' }} />
                                         </button>
                                     </Grid>
-                                    <Grid item xs={2} style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-end', marginLeft: 'auto' }}>
+                                    <Grid item xs={2} style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-end',paddingLeft:'15%' }}>
                                         <button onClick={onPresentWithdraw} style={{ fontSize: '15px', display: 'flex', flexDirection: 'row', color: '#FFFFFF', paddingLeft: '7px', borderRadius: '30px', width: '130px', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}>
                                             <Grid style={{ padding: '7px' }}> Withdraw</Grid>
                                             <img src={require('../../assets/img/downArrow.png')} alt={""} height={25} style={{ borderRadius: '50%', padding: '5px' }} />
@@ -187,7 +194,7 @@ const ButtonsNewsPanel = () => {
                                 </div>
                                 {/* <Grid item xs={2}> */}
                                 <Button
-                                    style={{ fontSize: '15px', color: '#FFFFFF', padding: '5px', borderRadius: '20px', marginLeft: 'auto', width: '80%', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}
+                                    style={{ fontSize: '15px', color: '#FFFFFF', padding: '5px', borderRadius: '20px', width: '100%', background: 'none', borderStyle: 'solid', borderColor: '#FFFFFF' }}
                                     onClick={onReward}
                                     className={earnings.eq(0) || !canClaimReward ? 'shinyButtonDisabledRewards' : 'shinyButtonEnabled'}
                                     disabled={earnings.eq(0) || !canClaimReward}

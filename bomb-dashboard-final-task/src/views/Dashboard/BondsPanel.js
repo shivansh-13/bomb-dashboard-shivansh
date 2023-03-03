@@ -1,18 +1,28 @@
-import { Grid } from '@material-ui/core';
 import React, { useCallback, useMemo } from 'react';
 import { BOND_REDEEM_PRICE, BOND_REDEEM_PRICE_BN } from '../../bomb-finance/constants';
-import { default as TokenSymbolMedium, default as TokenSymbolSmall } from '../../components/TokenSymbol/TokenSymbolSmall';
 import useBombFinance from '../../hooks/useBombFinance';
-import useBondsPurchasable from '../../hooks/useBondsPurchasable';
+import TokenSymbol from '../../components/TokenSymbol';
 import useBondStats from '../../hooks/useBondStats';
-import useCashPriceInLastTWAP from '../../hooks/useCashPriceInLastTWAP';
-import useTokenBalance from '../../hooks/useTokenBalance';
-import { useTransactionAdder } from '../../state/transactions/hooks';
 import { getDisplayBalance } from '../../utils/formatBalance';
+import useTokenBalance from '../../hooks/useTokenBalance';
+import useBondsPurchasable from '../../hooks/useBondsPurchasable';
+import useCashPriceInLastTWAP from '../../hooks/useCashPriceInLastTWAP';
+import { useTransactionAdder } from '../../state/transactions/hooks';
 import ExchangeCardDashboard from '../Bond/components/ExchangeCardDashboard';
 
+
+const card = {
+  backdropFilter: 'blur(2px) saturate(180%)',
+  backgroundColor: 'rgba(35, 40, 75, 0.75)',
+  borderRadius: '12px',
+  border: '1px solid rgba(114, 140, 223, 1)',
+  padding: '1.5rem 2rem',
+  color: 'white',
+  marginTop: '2rem'
+}
 const BondsPanel = () => {
 
+  const tBondStats = useBondStats()
   const bondStat = useBondStats();
   const bombFinance = useBombFinance();
   const bondBalance = useTokenBalance(bombFinance?.BBOND);
@@ -39,64 +49,65 @@ const BondsPanel = () => {
   );
   const isBondRedeemable = useMemo(() => cashPrice.gt(BOND_REDEEM_PRICE_BN), [cashPrice]);
   return (
-    <Grid container spacing={3} style={{ marginTop: '20px', display: 'flex', alignItems: 'center', borderRadius: '10px', borderStyle: 'solid', borderColor: '#728CDF', backgroundColor: ' rgba(35, 40, 75, 0.75)' }}>
 
-      <Grid item xs={10} style={{ padding: '20px', width: '100%' }}>
-        <Grid style={{ fontSize: '22px', color: '#FFFFFF' }}>
-          <TokenSymbolMedium symbol="BBOND" />
-          Bonds
-        </Grid>
-        <div style={{ fontSize: '14px', color: '#FFFFFF', paddingLeft: '10px' }}>
-          BBOND can be purchased only on contraction periods, when TWAP of BOMB is below 1
+    <div style={card}>
+      <div style={{ display: 'flex', gap: '1rem', color: 'white' }}>
+        <span> <TokenSymbol symbol="BBOND" size="50" /></span>
+        <div>
+          <span style={{ fontSize: '1.2rem', color: 'white', fontWeight: '600' }}>Bonds </span>
+          <p style={{ fontSize: '.9rem', fontWeight: '100', marginBottom: '.2rem', color: 'rgba(195, 197, 203, 1)' }}>BBOND can be purchased only on contraction periods, when TWAP of BOMB is below 1</p>
         </div>
-      </Grid>
-      <div style={{ padding: '20px', width: '100%' }}>
-        <Grid container spacing={3} style={{ fontSize: '20px', color: '#FFFFFF', width: '100%' }} >
-          <Grid item xs={3} >
-            <div> Current Price: (Bomb)^2</div>
-            <div>
-              10,000 BBond={Number(bondStat?.tokenInFtm).toFixed(4) || '-'} BTCB
-            </div>
-
-            {/* </div> */}
-          </Grid>
-          <Grid item xs={3}>
-            Available to redeem:
-            <div style={{ fontSize: '36px', color: '#FFFFFF', paddingTop: '7px' }}>
-              <TokenSymbolSmall symbol="BBOND" />{getDisplayBalance(bondBalance)}
-            </div>
-          </Grid>
-          {/* <Grid item xs={8} style={{ display: 'flex' }}> */}
-          <Grid item xs={6}>
-            <ExchangeCardDashboard
-              action="Purchase"
-              fromToken={bombFinance.BOMB}
-              fromTokenName="BOMB"
-              toToken={bombFinance.BBOND}
-              toTokenName="BBOND"
-              priceDesc={
-                !isBondPurchasable
-                  ? 'BOMB is over peg'
-                  : getDisplayBalance(bondsPurchasable, 18, 4) + ' BBOND available for purchase'
-              }
-              onExchange={handleBuyBonds}
-              disabled={!bondStat || isBondRedeemable}
-            /><div   style={{ borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF', paddingBottom: '7px', fontsize: '12px' }}/>
-            <ExchangeCardDashboard
-              action="Redeem"
-              fromToken={bombFinance.BBOND}
-              fromTokenName="BBOND"
-              toToken={bombFinance.BOMB}
-              toTokenName="BOMB"
-              // priceDesc={`${getDisplayBalance(bondBalance)} BBOND Available in wallet`}
-              onExchange={handleRedeemBonds}
-              disabled={!bondStat || bondBalance.eq(0) || !isBondRedeemable}
-              disabledDescription={!isBondRedeemable ? `Enabled when 10,000 BOMB > ${BOND_REDEEM_PRICE}BTC` : null}
-            />
-          </Grid>
-        </Grid>
       </div>
-    </Grid>
+      <div style={{ display: 'flex', justifyContent: 'space-between', gap: '5rem' }}>
+        <div style={{ display: 'flex', gap: '7rem', flex: '3', marginTop: '1.5rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '.8rem' }}>
+            <span style={{ color: 'rgba(195, 197, 203, 1)' }}>Current Price: (Bomb)^2</span>
+            <span style={{ fontSize: '1.3rem' }}>BBond = {Number(tBondStats?.tokenInFtm).toFixed(4)} BTCB</span>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '.4rem', textAlign: 'center' }}>
+            <span>Available to redeem: </span>
+            <span style={{ fontSize: '1.7rem', display: 'flex', justifyContent: 'center' }}>
+              <span><TokenSymbol symbol="BBOND" size="40" /></span><span style={{ alignSelf: 'center' }}>{getDisplayBalance(bondBalance)}</span> </span>
+          </div>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', flex: '2' }}>
+          <div style={{ display: 'flex', gap: '2rem', justifyContent: 'space-between', alignItems: 'center', borderBottom: 'solid 1px rgba(195, 197, 203, 0.75)', paddingBottom: '1rem' }}>
+            <div>
+              <ExchangeCardDashboard
+                action="Purchase"
+                fromToken={bombFinance.BOMB}
+                fromTokenName="BOMB"
+                toToken={bombFinance.BBOND}
+                toTokenName="BBOND"
+                priceDesc={
+                  !isBondPurchasable
+                    ? 'BOMB is over peg'
+                    : getDisplayBalance(bondsPurchasable, 18, 4) + ' BBOND available for purchase'
+                }
+                onExchange={handleBuyBonds}
+                disabled={!bondStat || isBondRedeemable}
+              />
+            </div>
+          </div>
+          <div style={{ display: 'flex', gap: '2rem', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div>
+              <ExchangeCardDashboard
+                action="Redeem"
+                fromToken={bombFinance.BBOND}
+                style={{ borderColor: 'white', borderRadius: '1rem' }}
+                fromTokenName="BBOND"
+                toToken={bombFinance.BOMB}
+                toTokenName="BOMB"
+                priceDesc={`${getDisplayBalance(bondBalance)} BBOND Available in wallet`}
+                onExchange={handleRedeemBonds}
+                disabled={!bondStat || bondBalance.eq(0) || !isBondRedeemable}
+                disabledDescription={!isBondRedeemable ? `Enabled when 10,000 BOMB > ${BOND_REDEEM_PRICE}BTC` : null}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

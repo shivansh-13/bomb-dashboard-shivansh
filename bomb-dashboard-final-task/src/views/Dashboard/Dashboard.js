@@ -16,6 +16,7 @@ import useCashPriceInEstimatedTWAP from '../../hooks/useCashPriceInEstimatedTWAP
 import Page from '../../components/Page';
 import { createGlobalStyle } from 'styled-components';
 import useCurrentEpoch from '../../hooks/useCurrentEpoch';
+import useCashPriceInLastTWAP from '../../hooks/useCashPriceInLastTWAP';
 import { Helmet } from 'react-helmet';
 import HomeImage from '../../assets/img/background.jpg';
 const BackgroundImage = createGlobalStyle`
@@ -42,7 +43,8 @@ const Dashboard = () => {
   const cashStat = useCashPriceInEstimatedTWAP();
   const currentEpoch = useCurrentEpoch();
   const classes = useStyles();
-
+  const cashPrice = useCashPriceInLastTWAP();
+  const bondScale = (Number(cashPrice) / 100000000000000).toFixed(4);
   const bankId_BTC = "BombBtcbLPBShareRewardPool";
   const bank_BTC = useBank(bankId_BTC);
 
@@ -69,14 +71,14 @@ const Dashboard = () => {
                   </Grid>
                   <Grid item xs={4}>
 
-                    <div className={classes.gridItem}  style={{marginLeft:'auto',marginRight:'auto', width:'75%', borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF', paddingBottom: '7px', fontsize: '12px', color: 'white' }} >
+                    <div className={classes.gridItem} style={{ marginLeft: 'auto', marginRight: 'auto', width: '75%', borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF', paddingBottom: '7px', fontsize: '12px', color: 'white' }} >
                       <CardContent align="center" >
                         <Typography style={{}}>Current Epoch</Typography>
                         <Typography style={{ fontSize: '30px' }}>{Number(currentEpoch)}</Typography>
                       </CardContent>
                     </div>
 
-                    <div className={classes.gridItem} style={{marginLeft:'auto',marginRight:'auto', width:'50%', borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF', paddingBottom: '7px', fontsize: '12px', color: 'white' }} >
+                    <div className={classes.gridItem} style={{ marginLeft: 'auto', marginRight: 'auto', width: '50%', borderBottom: 'solid', borderBottomWidth: '0.5px', borderColor: '#C3C5CBBF', paddingBottom: '7px', fontsize: '12px', color: 'white' }} >
                       <CardContent style={{ textAlign: 'center' }}>
                         <div style={{ fontSize: '30px' }}>
                           <ProgressCountdown base={moment().toDate()} hideBar={true} deadline={to} description="Next Epoch in" />
@@ -86,20 +88,17 @@ const Dashboard = () => {
                     </div>
                     <div className={classes.gridItem} style={{ color: 'white' }} >
                       <CardContent align="center">
-                        <Typography style={{ color: 'rgba(0, 232, 162, 1)' }}>
-                          Live TWAP:{scalingFactor}
-                        </Typography>
-                        <Typography style={{ color: 'rgba(0, 232, 162, 1)' }}>
-                          TVL: ${statsOnPool?.TVL}
-                        </Typography>
+                        <div>Live TWAP: <span style={{ color: "rgba(0, 232, 162, 1)" }}>{scalingFactor}</span></div>
+                        <div>TVL: <span style={{ color: "rgba(0, 232, 162, 1)" }}>{statsOnPool?.TVL}</span></div>
+                        <div>Last Epoch TWAP: <span style={{ color: "rgba(0, 232, 162, 1)" }}>{bondScale}</span></div>
                       </CardContent>
                     </div>
                   </Grid>
                 </Grid>
               </Grid>
-              <ButtonsNewsPanel/>
-              <BombFarms/>
-              <BondsPanel/>
+              <ButtonsNewsPanel />
+              <BombFarms />
+              <BondsPanel />
             </Box>
           </Container>
         </Route>
